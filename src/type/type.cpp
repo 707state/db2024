@@ -6,6 +6,7 @@
 #include "type/integer_type.h"
 #include "type/smallint_type.h"
 #include "type/tinyint_type.h"
+#include "type/type_id.h"
 #include "type/value.h"
 #include "type/varlen_type.h"
 #include <string>
@@ -24,18 +25,18 @@ Type *Type::k_types[] = {
 // Get the size of this data type in bytes
 auto Type::GetTypeSize(const TypeId type_id) -> uint64_t {
   switch (type_id) {
-  case BOOLEAN:
-  case TINYINT:
+  case TypeId::BOOLEAN:
+  case TypeId::TINYINT:
     return 1;
-  case SMALLINT:
+  case TypeId::SMALLINT:
     return 2;
-  case INTEGER:
+  case TypeId::INTEGER:
     return 4;
-  case BIGINT:
-  case DECIMAL:
-  case TIMESTAMP:
+  case TypeId::BIGINT:
+  case TypeId::DECIMAL:
+  case TypeId::TIMESTAMP:
     return 8;
-  case VARCHAR:
+  case TypeId::VARCHAR:
     return 0;
   default:
     break;

@@ -36,7 +36,6 @@
 #include <ctime>
 #include <string>
 
-namespace rmdb {
 
 // https://blog.galowicz.de/2016/02/20/short_file_macro/
 using cstr = const char *;
@@ -204,6 +203,5 @@ inline void OutputLogHeader(const char *file, int line, const char *func,
             func, type);
 }
 
-} // namespace rmdb
 
 #endif

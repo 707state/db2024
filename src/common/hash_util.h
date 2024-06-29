@@ -1,15 +1,3 @@
-//===----------------------------------------------------------------------===//
-//
-//                         rmdb
-//
-// hash_util.h
-//
-// Identification: src/include/common/util/hash_util.h
-//
-// Copyright (c) 2015-2019, Carnegie Mellon University Database Group
-//
-//===----------------------------------------------------------------------===//
-
 #pragma once
 
 #include <algorithm>
@@ -19,8 +7,6 @@
 
 #include "common/macros.h"
 #include "type/value.h"
-
-namespace rmdb {
 
 using hash_t = std::size_t;
 
@@ -99,5 +85,3 @@ public:
     }
   }
 };
-
-} // namespace rmdb

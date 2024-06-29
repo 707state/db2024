@@ -26,7 +26,7 @@ constexpr int RM_MAX_RECORD_SIZE = 512;
 struct PageId {
   int fd; //  Page所在的磁盘文件开启后的文件描述符,
           //  来定位打开的文件在内存中的位置
-  rmdb::page_id_t page_no = rmdb::INVALID_PAGE_ID;
+  page_id_t page_no = INVALID_PAGE_ID;
 
   friend bool operator==(const PageId &x, const PageId &y) {
     return x.fd == y.fd && x.page_no == y.page_no;
@@ -83,12 +83,12 @@ public:
   static constexpr size_t OFFSET_LSN = 0;
   static constexpr size_t OFFSET_PAGE_HDR = 4;
 
-  inline rmdb::lsn_t get_page_lsn() {
-    return *reinterpret_cast<rmdb::lsn_t *>(get_data() + OFFSET_LSN);
+  inline lsn_t get_page_lsn() {
+    return *reinterpret_cast<lsn_t *>(get_data() + OFFSET_LSN);
   }
 
-  inline void set_page_lsn(rmdb::lsn_t page_lsn) {
-    memcpy(get_data() + OFFSET_LSN, &page_lsn, sizeof(rmdb::lsn_t));
+  inline void set_page_lsn(lsn_t page_lsn) {
+    memcpy(get_data() + OFFSET_LSN, &page_lsn, sizeof(lsn_t));
   }
 
 private:

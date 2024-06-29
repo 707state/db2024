@@ -1,13 +1,9 @@
 #pragma once
 
-#include <memory>
 #include <string>
 #include <utility>
-#include <vector>
 
-#include "binder/bound_expression.h"
 #include "binder/bound_table_ref.h"
-#include "fmt/format.h"
 
 class SelectStatement;
 

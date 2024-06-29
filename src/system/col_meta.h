@@ -1,25 +1,48 @@
 #pragma once
 #include "defs.h"
 #include "system/column.h"
+#include "type/type_id.h"
 #include <string>
 #include <utility>
-namespace rmdb {
-class Column;
 
 class ColMeta {
 public:
   std::string tab_name; // 字段所属表名称
   std::string name;     // 字段名称
-  ColType type;         // 字段类型
+  TypeId type;          // 字段类型
   int len;              // 字段长度
   int offset;           // 字段位于记录中的偏移量
   [[maybe_unused]]
   bool index; /** unused */
   ColMeta() = default;
-  ColMeta(std::string tab_name, std::string name, ColType type, int len)
+  ColMeta(std::string tab_name, std::string name, TypeId type, int len)
       : tab_name(std::move(tab_name)), name(std::move(name)), type(type),
         len(len) {}
-  ColMeta(std::string tab_name, std::string name, ColType type, int len,
+  ColMeta(std::string tab_name, std::string name, ColType col_meta, int len)
+      : tab_name(std::move(tab_name)), name(std::move(name)), len(len) {
+
+    switch (col_meta) {
+    case ColType::TYPE_FLOAT: {
+      type = TypeId::DECIMAL;
+      break;
+    }
+    case ColType::TYPE_STRING: {
+      type = TypeId::VARCHAR;
+      break;
+    }
+    case ColType::TYPE_INT: {
+      type = TypeId::SMALLINT;
+      break;
+    }
+    case ColType::TYPE_TIMESTAMP: {
+      type = TypeId::TIMESTAMP;
+    }
+    default: {
+      type = TypeId::INVALID;
+    }
+    }
+  }
+  ColMeta(std::string tab_name, std::string name, TypeId type, int len,
           int offset, bool index)
       : tab_name(std::move(tab_name)), name(std::move(name)), type(type),
         len(len), offset(offset), index(index) {}
@@ -40,4 +63,3 @@ public:
            col.offset >> col.index;
   }
 };
-} // namespace rmdb

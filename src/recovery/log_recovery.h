@@ -10,7 +10,7 @@ See the Mulan PSL v2 for more details. */
 
 #pragma once
 
-#include "log_manager.h"
+#include "recovery/log_manager.h"
 #include "storage/disk_manager.h"
 #include "system/sm_manager.h"
 #include <map>

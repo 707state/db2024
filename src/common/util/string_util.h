@@ -1,14 +1,3 @@
-//===----------------------------------------------------------------------===//
-//
-//                         rmdb
-//
-// string_util.h
-//
-// Identification: src/include/common/util/string_util.h
-//
-// Copyright (c) 2015-2019, Carnegie Mellon University Database Group
-//
-//===----------------------------------------------------------------------===//
 
 #pragma once
 

@@ -15,7 +15,6 @@
 #include <cassert>
 #include <stdexcept>
 
-namespace rmdb {
 
 #define rmdb_ASSERT(expr, message) assert((expr) && (message))
 
@@ -41,4 +40,3 @@ namespace rmdb {
   DISALLOW_COPY(cname);                                                        \
   DISALLOW_MOVE(cname);
 
-} // namespace rmdb

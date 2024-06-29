@@ -11,11 +11,7 @@ See the Mulan PSL v2 for more details. */
 #pragma once
 #include <utility>
 
-#include "execution_defs.h"
-#include "execution_manager.h"
 #include "executor_abstract.h"
-#include "index/ix.h"
-#include "system/sm.h"
 
 class UpdateExecutor : public AbstractExecutor {
 private:

@@ -10,37 +10,14 @@ See the Mulan PSL v2 for more details. */
 
 #pragma once
 
+#include "errors.h"
+#include "sm_defs.h"
 #include <algorithm>
 #include <iostream>
 #include <map>
 #include <string>
+#include <system/col_meta.h>
 #include <vector>
-
-#include "errors.h"
-#include "sm_defs.h"
-namespace rmdb {
-/* 字段元数据 */
-struct ColMeta {
-  std::string tab_name; // 字段所属表名称
-  std::string name;     // 字段名称
-  ColType type;         // 字段类型
-  int len;              // 字段长度
-  int offset;           // 字段位于记录中的偏移量
-  [[maybe_unused]]
-  bool index; /** unused */
-
-  friend std::ostream &operator<<(std::ostream &os, const ColMeta &col) {
-    // ColMeta中有各个基本类型的变量，然后调用重载的这些变量的操作符<<（具体实现逻辑在defs.h）
-    return os << col.tab_name << ' ' << col.name << ' ' << col.type << ' '
-              << col.len << ' ' << col.offset << ' ' << col.index;
-  }
-
-  friend std::istream &operator>>(std::istream &is, ColMeta &col) {
-    return is >> col.tab_name >> col.name >> col.type >> col.len >>
-           col.offset >> col.index;
-  }
-};
-
 /* 索引元数据 */
 struct IndexMeta {
   std::string tab_name;      // 索引所属表名称
@@ -224,4 +201,3 @@ public:
     return is;
   }
 };
-} // namespace rmdb

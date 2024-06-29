@@ -17,8 +17,6 @@ target_link_libraries(err_msg_test gtest_main)
 add_executable(buffer_pool_manager_test buffer_pool_manager_test.cpp)
 target_link_libraries(buffer_pool_manager_test gtest_main storage record)
 
-add_executable(pg_query_test pg_query_test.cpp)
-target_link_libraries(pg_query_test pg_query)
 
-add_executable(normalize normalize.cpp)
-target_link_libraries(normalize pg_query)
+add_executable(binder_test binder_test.cpp)
+target_link_libraries(binder_test duckdb_pg_query fmt )

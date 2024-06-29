@@ -1,4 +1,5 @@
 #include "type/timestamp_type.h"
+#include <cassert>
 #include <string>
 
 #include "type/boolean_type.h"

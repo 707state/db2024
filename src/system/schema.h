@@ -13,7 +13,6 @@
 #include <type_traits>
 #include <utility>
 #include <vector>
-namespace rmdb {
 class Schema {
 public:
   Schema() = default;
@@ -154,4 +153,3 @@ struct fmt::formatter<std::unique_ptr<T>,
              : fmt::formatter<std::string>("", ctx);
   }
 };
-} // namespace rmdb

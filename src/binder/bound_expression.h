@@ -45,7 +45,7 @@ public:
 
 template <typename T>
 struct fmt::formatter<
-    T, std::enable_if_t<std::is_base_of<rmdb::BoundExpression, T>::value, char>>
+    T, std::enable_if_t<std::is_base_of<BoundExpression, T>::value, char>>
     : fmt::formatter<std::string> {
   template <typename FormatCtx> auto format(const T &x, FormatCtx &ctx) const {
     return fmt::formatter<std::string>::format(x.ToString(), ctx);
@@ -55,7 +55,7 @@ struct fmt::formatter<
 template <typename T>
 struct fmt::formatter<
     std::unique_ptr<T>,
-    std::enable_if_t<std::is_base_of<rmdb::BoundExpression, T>::value, char>>
+    std::enable_if_t<std::is_base_of<BoundExpression, T>::value, char>>
     : fmt::formatter<std::string> {
   template <typename FormatCtx>
   auto format(const std::unique_ptr<T> &x, FormatCtx &ctx) const {
@@ -63,40 +63,39 @@ struct fmt::formatter<
   }
 };
 
-template <>
-struct fmt::formatter<rmdb::ExpressionType> : formatter<string_view> {
+template <> struct fmt::formatter<ExpressionType> : formatter<string_view> {
   template <typename FormatContext>
-  auto format(rmdb::ExpressionType c, FormatContext &ctx) const {
+  auto format(ExpressionType c, FormatContext &ctx) const {
     string_view name;
     switch (c) {
-    case rmdb::ExpressionType::INVALID:
+    case ExpressionType::INVALID:
       name = "Invalid";
       break;
-    case rmdb::ExpressionType::CONSTANT:
+    case ExpressionType::CONSTANT:
       name = "Constant";
       break;
-    case rmdb::ExpressionType::COLUMN_REF:
+    case ExpressionType::COLUMN_REF:
       name = "ColumnRef";
       break;
-    case rmdb::ExpressionType::TYPE_CAST:
+    case ExpressionType::TYPE_CAST:
       name = "TypeCast";
       break;
-    case rmdb::ExpressionType::FUNCTION:
+    case ExpressionType::FUNCTION:
       name = "Function";
       break;
-    case rmdb::ExpressionType::AGG_CALL:
+    case ExpressionType::AGG_CALL:
       name = "AggregationCall";
       break;
-    case rmdb::ExpressionType::STAR:
+    case ExpressionType::STAR:
       name = "Star";
       break;
-    case rmdb::ExpressionType::UNARY_OP:
+    case ExpressionType::UNARY_OP:
       name = "UnaryOperation";
       break;
-    case rmdb::ExpressionType::BINARY_OP:
+    case ExpressionType::BINARY_OP:
       name = "BinaryOperation";
       break;
-    case rmdb::ExpressionType::ALIAS:
+    case ExpressionType::ALIAS:
       name = "Alias";
       break;
     }

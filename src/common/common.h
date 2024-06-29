@@ -10,13 +10,13 @@ See the Mulan PSL v2 for more details. */
 
 #pragma once
 
-#include "defs.h"
+#include "common/exception.h"
 #include "record/rm_defs.h"
 #include <cassert>
 #include <cstring>
 #include <memory>
 #include <string>
-#include <vector>
+struct Page;
 struct TabCol {
   std::string tab_name;
   std::string col_name;
@@ -27,7 +27,7 @@ struct TabCol {
   }
 };
 
-struct Value {
+struct sValue {
   ColType type; // type of value
   union {
     int int_val;     // int value
@@ -63,7 +63,7 @@ struct Value {
       *(float *)(raw->data) = float_val;
     } else if (type == TYPE_STRING) {
       if (len < (int)str_val.size()) {
-        throw StringOverflowError();
+        throw Exception("String overflow");
       }
       memset(raw->data, 0, len);
       memcpy(raw->data, str_val.c_str(), str_val.size());
@@ -78,10 +78,10 @@ struct Condition {
   CompOp op;       // comparison operator
   bool is_rhs_val; // true if right-hand side is a value (not a column)
   TabCol rhs_col;  // right-hand side column
-  Value rhs_val;   // right-hand side value
+  sValue rhs_val;  // right-hand side value
 };
 
 struct SetClause {
   TabCol lhs;
-  Value rhs;
+  sValue rhs;
 };

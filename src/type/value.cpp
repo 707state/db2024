@@ -5,11 +5,10 @@
 #include "common/exception.h"
 #include "type/value.h"
 
-Value::Value(const Value &other) {
-  type_id_ = other.type_id_;
-  size_ = other.size_;
-  manage_data_ = other.manage_data_;
-  value_ = other.value_;
+Value::Value(const Value &other)
+    : value_(other.value_), size_(other.size_),
+      manage_data_(other.manage_data_), type_id_(other.type_id_) {
+
   switch (type_id_) {
   case TypeId::VARCHAR:
     if (size_.len_ == BUSTUB_VALUE_NULL) {

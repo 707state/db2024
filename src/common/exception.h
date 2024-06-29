@@ -21,7 +21,6 @@
 
 #include "type/type.h"
 
-namespace rmdb {
 
 // TODO(WAN): the comment I added below is a lie, but you shouldn't need to poke
 // around here. Don't worry about it.
@@ -132,4 +131,3 @@ public:
       : Exception(ExceptionType::EXECUTION, msg) {}
 };
 
-} // namespace rmdb

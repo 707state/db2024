@@ -1,21 +1,6 @@
-//===----------------------------------------------------------------------===//
-//
-//                         rmdb
-//
-// hash_util.h
-//
-// Identification: src/include/common/util/hash_util.h
-//
-// Copyright (c) 2015-2019, Carnegie Mellon University Database Group
-//
-//===----------------------------------------------------------------------===//
-
 #pragma once
 
-#include <algorithm>
 #include <cstdlib>
-#include <iostream>
-#include <string>
 
 #include "common/macros.h"
 #include "type/value.h"

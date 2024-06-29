@@ -11,11 +11,9 @@
 #include <vector>
 
 #include "binder/bound_statement.h"
-#include "catalog/column.h"
+#include "system/column.h"
 
-namespace duckdb_libpgquery {
 struct PGCreateStmt;
-} // namespace duckdb_libpgquery
 
 class CreateStatement : public BoundStatement {
 public:

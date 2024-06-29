@@ -53,7 +53,7 @@ public:
 
 template <typename T>
 struct fmt::formatter<
-    T, std::enable_if_t<std::is_base_of<rmdb::BoundTableRef, T>::value, char>>
+    T, std::enable_if_t<std::is_base_of<BoundTableRef, T>::value, char>>
     : fmt::formatter<std::string> {
   template <typename FormatCtx> auto format(const T &x, FormatCtx &ctx) const {
     return fmt::formatter<std::string>::format(x.ToString(), ctx);
@@ -63,7 +63,7 @@ struct fmt::formatter<
 template <typename T>
 struct fmt::formatter<
     std::unique_ptr<T>,
-    std::enable_if_t<std::is_base_of<rmdb::BoundTableRef, T>::value, char>>
+    std::enable_if_t<std::is_base_of<BoundTableRef, T>::value, char>>
     : fmt::formatter<std::string> {
   template <typename FormatCtx>
   auto format(const std::unique_ptr<T> &x, FormatCtx &ctx) const {
@@ -71,34 +71,33 @@ struct fmt::formatter<
   }
 };
 
-template <>
-struct fmt::formatter<rmdb::TableReferenceType> : formatter<string_view> {
+template <> struct fmt::formatter<TableReferenceType> : formatter<string_view> {
   template <typename FormatContext>
-  auto format(rmdb::TableReferenceType c, FormatContext &ctx) const {
+  auto format(TableReferenceType c, FormatContext &ctx) const {
     string_view name;
     switch (c) {
-    case rmdb::TableReferenceType::INVALID:
+    case TableReferenceType::INVALID:
       name = "Invalid";
       break;
-    case rmdb::TableReferenceType::BASE_TABLE:
+    case TableReferenceType::BASE_TABLE:
       name = "BaseTable";
       break;
-    case rmdb::TableReferenceType::JOIN:
+    case TableReferenceType::JOIN:
       name = "Join";
       break;
-    case rmdb::TableReferenceType::CROSS_PRODUCT:
+    case TableReferenceType::CROSS_PRODUCT:
       name = "CrossProduct";
       break;
-    case rmdb::TableReferenceType::EMPTY:
+    case TableReferenceType::EMPTY:
       name = "Empty";
       break;
-    case rmdb::TableReferenceType::EXPRESSION_LIST:
+    case TableReferenceType::EXPRESSION_LIST:
       name = "ExpressionList";
       break;
-    case rmdb::TableReferenceType::SUBQUERY:
+    case TableReferenceType::SUBQUERY:
       name = "Subquery";
       break;
-    case rmdb::TableReferenceType::CTE:
+    case TableReferenceType::CTE:
       name = "CTE";
       break;
     default:

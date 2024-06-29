@@ -9,6 +9,7 @@ MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 See the Mulan PSL v2 for more details. */
 #pragma once
 
+#include "common/common.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -97,27 +98,27 @@ struct DropIndex : public TreeNode {
 // TODO: 完成这两部分
 struct Expr : public TreeNode {};
 
-struct Value : public Expr {};
+struct eValue : public Expr {};
 
-struct IntLit : public Value {
+struct IntLit : public eValue {
   int val;
 
   explicit IntLit(int val_) : val(val_) {}
 };
 
-struct FloatLit : public Value {
+struct FloatLit : public eValue {
   float val;
 
   explicit FloatLit(float val_) : val(val_) {}
 };
 
-struct StringLit : public Value {
+struct StringLit : public eValue {
   std::string val;
 
   explicit StringLit(std::string val_) : val(std::move(val_)) {}
 };
 
-struct BoolLit : public Value {
+struct BoolLit : public sValue {
   bool val;
 
   explicit BoolLit(bool val_) : val(val_) {}
@@ -158,9 +159,9 @@ struct OrderBy : public TreeNode {
 
 struct InsertStmt : public TreeNode {
   std::string tab_name;
-  std::vector<std::shared_ptr<Value>> vals;
+  std::vector<std::shared_ptr<sValue>> vals;
 
-  InsertStmt(std::string tab_name_, std::vector<std::shared_ptr<Value>> vals_)
+  InsertStmt(std::string tab_name_, std::vector<std::shared_ptr<sValue>> vals_)
       : tab_name(std::move(tab_name_)), vals(std::move(vals_)) {}
 };
 

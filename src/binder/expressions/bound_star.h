@@ -13,7 +13,7 @@ public:
   BoundStar() : BoundExpression(ExpressionType::STAR) {}
 
   auto HasAggregation() const -> bool override {
-    throw bustub::Exception(
+    throw Exception(
         "`HasAggregation` should not have been called on `BoundStar`.");
   }
 

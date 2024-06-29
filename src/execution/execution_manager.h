@@ -13,17 +13,13 @@ See the Mulan PSL v2 for more details. */
 #include <cassert>
 #include <cstring>
 #include <memory>
-#include <string>
 #include <vector>
 
 #include "common/common.h"
 #include "common/context.h"
-#include "execution_defs.h"
 #include "executor_abstract.h"
 #include "optimizer/plan.h"
 #include "optimizer/planner.h"
-#include "record/rm.h"
-#include "system/sm.h"
 #include "transaction/transaction_manager.h"
 
 class Planner;

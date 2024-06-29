@@ -4,15 +4,9 @@
 #include <stdexcept>
 #include <string>
 
-#include "common/macros.h"
-#include "common/string_util.h"
+#include "common/exception.h"
 #include "type/abstract_pool.h"
-#include "type/boolean_type.h"
-#include "type/decimal_type.h"
-#include "type/numeric_type.h"
-#include "type/timestamp_type.h"
 #include "type/value.h"
-#include "type/varlen_type.h"
 
 //===--------------------------------------------------------------------===//
 // Value Factory

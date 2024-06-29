@@ -1,4 +1,3 @@
-#include "binder/bound_order_by.h"
 #include "binder/expressions/bound_agg_call.h"
 #include "binder/statement/select_statement.h"
 #include "binder/table_ref/bound_cte_ref.h"

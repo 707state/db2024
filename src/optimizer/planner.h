@@ -19,12 +19,8 @@ See the Mulan PSL v2 for more details. */
 #include "analyze/analyze.h"
 #include "common/common.h"
 #include "common/context.h"
-#include "execution/execution_defs.h"
 #include "execution/execution_manager.h"
-#include "parser/parser.h"
 #include "plan.h"
-#include "record/rm.h"
-#include "system/sm.h"
 
 class Planner {
 private:

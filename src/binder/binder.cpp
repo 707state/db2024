@@ -1,21 +1,11 @@
 
-#include <iostream>
-#include <unordered_set>
 
 #include "binder/binder.h"
-#include "binder/bound_statement.h"
-#include "binder/statement/create_statement.h"
-#include "binder/statement/delete_statement.h"
-#include "binder/statement/insert_statement.h"
 #include "binder/statement/select_statement.h"
-#include "binder/tokens.h"
 #include "common/exception.h"
 #include "common/logger.h"
-#include "common/util/string_util.h"
 #include "fmt/format.h"
-#include "pg_definitions.hpp"
 #include "postgres_parser.hpp"
-#include "type/decimal_type.h"
 
 Binder::Binder(const Catalog &catalog) : catalog_(catalog) {}
 

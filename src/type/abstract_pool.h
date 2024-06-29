@@ -1,7 +1,6 @@
 #pragma once
 
 #include <cstdlib>
-namespace rmdb {
 
 // Interface of a memory pool that can quickly allocate chunks of memory
 class AbstractPool {
@@ -24,4 +23,3 @@ public:
    */
   virtual void Free(void *ptr) = 0;
 };
-} // namespace rmdb

@@ -27,7 +27,7 @@ public:
   static auto GetMaxValue(TypeId type_id) -> Value;
 
   inline static auto GetInstance(TypeId type_id) -> Type * {
-    return k_types[type_id];
+    return k_types[static_cast<int>(type_id)];
   }
 
   inline auto GetTypeId() const -> TypeId { return type_id_; }

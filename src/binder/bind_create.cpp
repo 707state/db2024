@@ -43,7 +43,7 @@ auto Binder::BindColumnDefinition(duckdb_libpgquery::PGColumnDef *cdef)
                                cdef->typeName->names->tail->data.ptr_value)
                                ->val.str));
 
-  if (name == "int4") {
+  if (name == "int") {
     return {colname, TypeId::INTEGER};
   }
 

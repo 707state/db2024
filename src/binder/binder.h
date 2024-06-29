@@ -3,7 +3,6 @@
 
 #include <memory>
 #include <optional>
-#include <unordered_map>
 #include <vector>
 
 #include <string>
@@ -12,19 +11,12 @@
 #include "binder/statement/select_statement.h"
 #include "binder/statement/set_show_statement.h"
 #include "binder/tokens.h"
-#include "catalog/catalog.h"
-#include "catalog/column.h"
 #include "common/macros.h"
-#include "common/util/string_util.h"
-#include "fmt/format.h"
 #include "nodes/parsenodes.hpp"
 #include "nodes/pg_list.hpp"
-#include "pg_definitions.hpp"
 #include "postgres_parser.hpp"
-#include "type/type_id.h"
-#include "type/value.h"
+#include "system/column.h"
 
-namespace duckdb_libpgquery {
 struct PGList;
 struct PGSelectStmt;
 struct PGAConst;
@@ -35,7 +27,6 @@ struct PGColumnRef;
 struct PGResTarget;
 struct PGAExpr;
 struct PGJoinExpr;
-} // namespace duckdb_libpgquery
 
 class BoundColumnRef;
 class BoundExpression;

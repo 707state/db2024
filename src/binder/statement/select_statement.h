@@ -19,8 +19,6 @@
 #include "binder/bound_table_ref.h"
 #include "binder/table_ref/bound_subquery_ref.h"
 
-class Catalog;
-
 class SelectStatement : public BoundStatement {
 public:
   explicit SelectStatement(

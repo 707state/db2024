@@ -13,7 +13,6 @@
 #include "binder/bound_expression.h"
 #include "binder/bound_statement.h"
 #include "binder/table_ref/bound_base_table_ref.h"
-#include "catalog/column.h"
 
 class DeleteStatement : public BoundStatement {
 public:

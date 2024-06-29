@@ -1,5 +1,6 @@
 #include "execution/executor_insert.h"
 #include "record/rm_defs.h"
+#include "type/type_id.h"
 #include <memory>
 std::unique_ptr<RmRecord> InsertExecutor::Next() {
   // Make record buffer
@@ -7,8 +8,8 @@ std::unique_ptr<RmRecord> InsertExecutor::Next() {
   for (size_t i = 0; i < values_.size(); i++) {
     auto &col = tab_.cols[i];
     auto &val = values_[i];
-    if (col.type != val.type) {
-      throw IncompatibleTypeError(coltype2str(col.type), coltype2str(val.type));
+    if (col.type != coltype_to_typeid(val.type)) {
+      throw IncompatibleTypeError(typeid2str(col.type), coltype2str(val.type));
     }
     val.init_raw(col.len);
     memcpy(rec.data + col.offset, val.raw->data, col.len);

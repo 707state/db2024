@@ -9,12 +9,9 @@
 
 #include <memory>
 #include <string>
-#include <vector>
 
 #include "binder/bound_statement.h"
 #include "binder/table_ref/bound_base_table_ref.h"
-#include "catalog/column.h"
-#include "type/value.h"
 
 class SelectStatement;
 

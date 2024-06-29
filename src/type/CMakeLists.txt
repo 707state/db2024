@@ -4,9 +4,7 @@ set(SOURCE
     decimal_type.cpp
     integer_parent_type.cpp
     integer_type.cpp
-    smallint_type.cpp
     timestamp_type.cpp
-    tinyint_type.cpp
     type.cpp
     value.cpp
     varlen_type.cpp)

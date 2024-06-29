@@ -1,5 +1,5 @@
-#include "catalog/column.h"
 #include "fmt/ranges.h"
+#include "system/column.h"
 
 #include "binder/statement/create_statement.h"
 

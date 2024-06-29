@@ -8,7 +8,6 @@
 #include <sstream>
 #include <string>
 #include <vector>
-namespace rmdb {
 Schema::Schema(const std::vector<Column> &columns, const std::string &tab_name)
     : tab_name(tab_name) {
   size_t curr_offset = 0;
@@ -76,4 +75,3 @@ auto Schema::to_string(bool simplified) const -> std::string {
   if (simplified) {
   }
 }
-} // namespace rmdb

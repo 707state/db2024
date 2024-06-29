@@ -9,10 +9,9 @@ MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 See the Mulan PSL v2 for more details. */
 
 #pragma once
-#include "defs.h"
-#include "storage/buffer_pool_manager.h"
-namespace rmdb {
+
 /* 文件头，记录表数据文件的元信息，写入磁盘中文件的第0号页面 */
+#include <cstring>
 struct RmFileHdr {
   int record_size; // 表中每条记录的大小，由于不包含变长字段，因此当前字段初始化后保持不变
   int num_pages;   // 文件中分配的页面个数（初始化为1）
@@ -29,8 +28,8 @@ struct RmPageHdr {
 
 /* 表中的记录 */
 struct RmRecord {
-  char *data;              // 记录的数据
-  int size;                // 记录的大小
+  char *data{};            // 记录的数据
+  int size{};              // 记录的大小
   bool allocated_ = false; // 是否已经为数据分配空间
 
   RmRecord() = default;
@@ -82,4 +81,3 @@ struct RmRecord {
     data = nullptr;
   }
 };
-}; // namespace rmdb

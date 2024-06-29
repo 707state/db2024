@@ -10,16 +10,9 @@ See the Mulan PSL v2 for more details. */
 
 #pragma once
 
-#include <map>
-
 #include "common/context.h"
-#include "errors.h"
-#include "execution/execution.h"
-#include "parser/parser.h"
 #include "plan.h"
 #include "planner.h"
-#include "system/sm.h"
-#include "transaction/transaction_manager.h"
 
 class Optimizer {
 private:

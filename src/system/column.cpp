@@ -2,7 +2,6 @@
 #include "defs.h"
 #include <sstream>
 #include <string>
-namespace rmdb {
 auto Column::to_string(bool simplified) const -> std::string {
   std::ostringstream os;
 
@@ -18,4 +17,3 @@ auto Column::to_string(bool simplified) const -> std::string {
   return (os.str());
 }
 
-} // namespace rmdb

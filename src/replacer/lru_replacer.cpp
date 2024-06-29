@@ -12,7 +12,6 @@ See the Mulan PSL v2 for more details. */
 #include "common/config.h"
 #include <mutex>
 #include <utility>
-namespace rmdb {
 LRUReplacer::LRUReplacer(size_t num_pages) { max_size_ = num_pages; }
 
 LRUReplacer::~LRUReplacer() = default;
@@ -80,4 +79,3 @@ void LRUReplacer::unpin(frame_id_t frame_id) {
  * @description: 获取当前replacer中可以被淘汰的页面数量
  */
 size_t LRUReplacer::Size() { return LRUlist_.size(); }
-} // namespace rmdb

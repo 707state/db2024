@@ -9,6 +9,7 @@ MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
 See the Mulan PSL v2 for more details. */
 
 #include "analyze.h"
+#include "type/type_id.h"
 
 /**
  * @description: 分析器，进行语义分析和查询重写，需要检查不符合语义规定的部分
@@ -107,7 +108,7 @@ void Analyze::get_clause(
     cond.lhs_col = {.tab_name = expr->lhs->tab_name,
                     .col_name = expr->lhs->col_name};
     cond.op = convert_sv_comp_op(expr->op);
-    if (auto rhs_val = std::dynamic_pointer_cast<ast::Value>(expr->rhs)) {
+    if (auto rhs_val = std::dynamic_pointer_cast<ast::eValue>(expr->rhs)) {
       cond.is_rhs_val = true;
       cond.rhs_val = convert_sv_value(rhs_val);
     } else if (auto rhs_col = std::dynamic_pointer_cast<ast::Col>(expr->rhs)) {
@@ -133,7 +134,7 @@ void Analyze::check_clause(const std::vector<std::string> &tab_names,
     }
     TabMeta &lhs_tab = sm_manager_->db_.get_table(cond.lhs_col.tab_name);
     auto lhs_col = lhs_tab.get_col(cond.lhs_col.col_name);
-    ColType lhs_type = lhs_col->type;
+    ColType lhs_type = typeid_to_coltype(lhs_col->type);
     ColType rhs_type;
     if (cond.is_rhs_val) {
       cond.rhs_val.init_raw(lhs_col->len);
@@ -141,7 +142,7 @@ void Analyze::check_clause(const std::vector<std::string> &tab_names,
     } else {
       TabMeta &rhs_tab = sm_manager_->db_.get_table(cond.rhs_col.tab_name);
       auto rhs_col = rhs_tab.get_col(cond.rhs_col.col_name);
-      rhs_type = rhs_col->type;
+      rhs_type = typeid_to_coltype(rhs_col->type);
     }
     if (lhs_type != rhs_type) {
       throw IncompatibleTypeError(coltype2str(lhs_type), coltype2str(rhs_type));
@@ -149,8 +150,9 @@ void Analyze::check_clause(const std::vector<std::string> &tab_names,
   }
 }
 
-Value Analyze::convert_sv_value(const std::shared_ptr<ast::Value> &sv_val) {
-  Value val;
+auto Analyze::convert_sv_value(const std::shared_ptr<ast::eValue> &sv_val)
+    -> sValue {
+  sValue val;
   if (auto int_lit = std::dynamic_pointer_cast<ast::IntLit>(sv_val)) {
     val.set_int(int_lit->val);
   } else if (auto float_lit =

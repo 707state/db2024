@@ -1,17 +1,19 @@
 #pragma once
 
 #include "binder/bound_table_ref.h"
-#include "catalog/schema.h"
-#include "concurrency/transaction.h"
 #include "fmt/core.h"
+#include "system/schema.h"
+#include "transaction/transaction.h"
 #include <optional>
 #include <string>
+#include <sys/types.h>
 #include <utility>
 
 /**
  * A bound table ref type for single table. e.g., `SELECT x FROM y`, where `y`
  * is `BoundBaseTableRef`.
  */
+using table_oid_t = uint32_t;
 class BoundBaseTableRef : public BoundTableRef {
 public:
   explicit BoundBaseTableRef(std::string table, table_oid_t oid,

@@ -2,7 +2,6 @@
 
 #include "type/boolean_type.h"
 #include <string>
-namespace rmdb {
 #define BOOLEAN_COMPARE_FUNC(OP)                                               \
   GetCmpBool(                                                                  \
       left.value_.boolean_ OP right.CastAs(TypeId::BOOLEAN).value_.boolean_)

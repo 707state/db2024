@@ -16,6 +16,7 @@ See the Mulan PSL v2 for more details. */
 #include "ix_defs.h"
 #include "ix_index_handle.h"
 #include "system/sm_meta.h"
+#include "type/type_id.h"
 
 class IxManager {
 private:
@@ -92,7 +93,7 @@ public:
                       col_tot_len, btree_order, (btree_order + 1) * col_tot_len,
                       IX_INIT_ROOT_PAGE, IX_INIT_ROOT_PAGE);
     for (int i = 0; i < col_num; ++i) {
-      fhdr->col_types_.push_back(index_cols[i].type);
+      fhdr->col_types_.push_back(typeid_to_coltype(index_cols[i].type));
       fhdr->col_lens_.push_back(index_cols[i].len);
     }
     fhdr->update_tot_len();

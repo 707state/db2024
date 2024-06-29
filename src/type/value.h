@@ -53,6 +53,8 @@ public:
   Value(TypeId type, const std::string &data);
 
   Value() : Value(TypeId::INVALID) {}
+  Value(Value &&) = delete;
+  Value &operator=(Value &&) = default;
   Value(const Value &other);
   auto operator=(Value other) -> Value &;
   ~Value();
@@ -164,7 +166,6 @@ public:
     return Type::GetInstance(type_id_)->Copy(*this);
   }
 
-protected:
   // The actual value item
   union Val {
     int8_t boolean_;
@@ -176,13 +177,14 @@ protected:
     uint64_t timestamp_;
     char *varlen_;
     const char *const_varlen_;
-  } value_;
+  } value_{};
 
   union {
     uint32_t len_;
     TypeId elem_type_id_;
-  } size_;
+  } size_{};
 
+public:
   bool manage_data_;
   // The data type
   TypeId type_id_;

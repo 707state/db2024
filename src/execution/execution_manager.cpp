@@ -10,15 +10,10 @@ See the Mulan PSL v2 for more details. */
 
 #include "execution_manager.h"
 
-#include "executor_delete.h"
-#include "executor_index_scan.h"
-#include "executor_insert.h"
-#include "executor_nestedloop_join.h"
-#include "executor_projection.h"
-#include "executor_seq_scan.h"
-#include "executor_update.h"
-#include "index/ix.h"
+#include "fmt/base.h"
 #include "record_printer.h"
+#include "type/type_id.h"
+#include <type/type.h>
 
 const char *help_info =
     "Supported SQL syntax:\n"
@@ -168,11 +163,11 @@ void QlManager::select_from(std::unique_ptr<AbstractExecutor> executorTreeRoot,
     for (auto &col : executorTreeRoot->cols()) {
       std::string col_str;
       char *rec_buf = Tuple->data + col.offset;
-      if (col.type == TYPE_INT) {
+      if (col.type == coltype_to_typeid(TYPE_INT)) {
         col_str = std::to_string(*(int *)rec_buf);
-      } else if (col.type == TYPE_FLOAT) {
+      } else if (col.type == coltype_to_typeid(TYPE_FLOAT)) {
         col_str = std::to_string(*(float *)rec_buf);
-      } else if (col.type == TYPE_STRING) {
+      } else if (col.type == coltype_to_typeid(TYPE_STRING)) {
         col_str = std::string((char *)rec_buf, col.len);
         col_str.resize(strlen(col_str.c_str()));
       }

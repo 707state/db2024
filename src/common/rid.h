@@ -18,8 +18,6 @@
 
 #include "common/config.h"
 
-namespace rmdb {
-
 class RID {
 public:
   /** The default constructor creates an invalid RID! */
@@ -73,12 +71,8 @@ private:
   uint32_t slot_num_{0}; // logical offset from 0, 1...
 };
 
-} // namespace rmdb
-
-namespace std {
-template <> struct hash<rmdb::RID> {
-  auto operator()(const rmdb::RID &obj) const -> size_t {
+template <> struct std::hash<RID> {
+  auto operator()(const RID &obj) const -> size_t {
     return hash<int64_t>()(obj.Get());
   }
 };
-} // namespace std

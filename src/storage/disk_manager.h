@@ -32,17 +32,16 @@ public:
   explicit DiskManager();
 
   ~DiskManager() = default;
-  RC_VALUES write_page_rc(int fd, rmdb::page_id_t page_no, const char *offset,
+  RC_VALUES write_page_rc(int fd, page_id_t page_no, const char *offset,
                           int num_bytes);
-  void write_page(int fd, rmdb::page_id_t page_no, const char *offset,
-                  int num_bytes);
-  RC_VALUES read_page_rc(int fd, rmdb::page_id_t page_no, char *offset,
+  void write_page(int fd, page_id_t page_no, const char *offset, int num_bytes);
+  RC_VALUES read_page_rc(int fd, page_id_t page_no, char *offset,
                          int num_bytes);
-  void read_page(int fd, rmdb::page_id_t page_no, char *offset, int num_bytes);
+  void read_page(int fd, page_id_t page_no, char *offset, int num_bytes);
 
-  rmdb::page_id_t allocate_page(int fd);
-  RC_VALUES deallocate_page_rc(rmdb::page_id_t page_id);
-  void deallocate_page(rmdb::page_id_t page_id);
+  page_id_t allocate_page(int fd);
+  RC_VALUES deallocate_page_rc(page_id_t page_id);
+  void deallocate_page(page_id_t page_id);
 
   /*目录操作*/
   auto is_dir(const std::string &path) -> bool;
@@ -92,7 +91,7 @@ public:
    * @return {page_id_t} 已分配的页面个数
    * @param {int} fd 文件对应的句柄
    */
-  auto get_fd2pageno(int fd) -> rmdb::page_id_t { return fd2pageno_[fd]; }
+  auto get_fd2pageno(int fd) -> page_id_t { return fd2pageno_[fd]; }
 
   static constexpr int MAX_FD = 8192;
 
@@ -104,6 +103,6 @@ private:
       fd2path_; //<Page fd,Page文件磁盘路径>哈希表
 
   int log_fd_ = -1; // WAL日志文件的文件句柄，默认为-1，代表未打开日志文件
-  std::atomic<rmdb::page_id_t>
+  std::atomic<page_id_t>
       fd2pageno_[MAX_FD]{}; // 文件中已经分配的页面个数，初始值为0
 };

@@ -10,10 +10,10 @@ auto Binder::BindVariableSet(duckdb_libpgquery::PGVariableSetStmt *stmt)
     -> std::unique_ptr<VariableSetStatement> {
   auto expr = BindExpressionList(stmt->args);
   if (expr.size() != 1) {
-    throw rmdb::NotImplementedException("Only exactly one arg is supported");
+    throw NotImplementedException("Only exactly one arg is supported");
   }
   if (expr[0]->type_ != ExpressionType::CONSTANT) {
-    throw rmdb::NotImplementedException("Only constant is supported");
+    throw NotImplementedException("Only constant is supported");
   }
   const auto &const_expr = dynamic_cast<const BoundConstant &>(*expr[0]);
   return std::make_unique<VariableSetStatement>(stmt->name,

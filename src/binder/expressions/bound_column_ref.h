@@ -1,14 +1,14 @@
 #pragma once
 
+#include "binder/bound_expression.h"
+#include "common/macros.h"
 #include <algorithm>
+#include <fmt/ranges.h>
 #include <iterator>
 #include <memory>
 #include <string>
 #include <utility>
 #include <vector>
-
-#include "binder/bound_expression.h"
-#include "common/macros.h"
 
 /**
  * A bound column reference, e.g., `y.x` in the SELECT list.

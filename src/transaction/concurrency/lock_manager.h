@@ -12,6 +12,7 @@ See the Mulan PSL v2 for more details. */
 
 #include "transaction/transaction.h"
 #include <condition_variable>
+#include <list>
 #include <mutex>
 
 static const std::string GroupLockModeStr[10] = {"NON_LOCK", "IS", "IX",
@@ -54,7 +55,7 @@ class LockManager {
   };
 
 public:
-  LockManager() {}
+  LockManager() = default;
 
   ~LockManager() {}
 
@@ -72,7 +73,11 @@ public:
 
   bool unlock(Transaction *txn, LockDataId lock_data_id);
 
+  bool lock_stmt_check(Transaction *txn); // 用于检查加锁的阶段是否正确
+
+  bool unlock_stmt_check(Transaction *txn); // 用于检查释放锁的阶段是否正确
+
 private:
   std::mutex latch_; // 用于锁表的并发
-  std::unordered_map<LockDataId, LockRequestQueue> lock_table_; // 全局锁表
+  std::unordered_set<LockDataId, LockRequestQueue> lock_table_; // 全局锁表
 };

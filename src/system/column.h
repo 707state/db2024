@@ -4,7 +4,6 @@
 #include "defs.h"
 #include "fmt/base.h"
 #include "fmt/core.h"
-#include "system/col_meta.h"
 #include "type/type_id.h"
 
 #include <cstddef>
@@ -14,7 +13,6 @@
 #include <string>
 #include <type_traits>
 #include <utility>
-namespace rmdb {
 class ColMeta;
 class Column {
 public:
@@ -22,33 +20,84 @@ public:
   //     : col_name_(std::move(a.name)), type_id(a.type), col_len_(a.len),
   //       col_offset_(a.offset) {}
   Column() = default;
-  Column(std::string col_name, ColType col_type)
+  Column(const Column &) = default;
+  Column(Column &&) = default;
+  Column &operator=(const Column &) = default;
+  Column &operator=(Column &&) = default;
+  Column(std::string col_name, TypeId col_type)
       : col_name_(std::move(col_name)), type_id(col_type),
-        col_len_(coltype2len(col_type)) {
-    if (type_id == ColType::TYPE_STRING) {
+        col_len_(TypeSize(col_type)) {
+    if (type_id == TypeId::VARCHAR) {
       LOG_WARNING("column: %s.\tstring type must have length.\n",
                   col_name_.c_str());
     }
   }
-  Column(std::string col_name, ColType col_type, size_t col_len)
+  Column(std::string col_name, TypeId col_type, size_t col_len)
       : col_name_(std::move(col_name)), type_id(col_type), col_len_(col_len) {
-    if (type_id != ColType::TYPE_STRING) {
+    if (type_id != TypeId::VARCHAR) {
       LOG_WARNING("column: %s\tonly string type needs length.\n",
                   col_name_.c_str());
+    }
+  }
+  Column(std::string col_name, ColType type, size_t col_len)
+      : col_name_(std::move(col_name)), col_len_(col_len) {
+
+    switch (type) {
+    case ColType::TYPE_FLOAT: {
+      type_id = TypeId::DECIMAL;
+      break;
+    }
+    case ColType::TYPE_INT: {
+      type_id = TypeId::SMALLINT;
+      break;
+    }
+    case ColType::TYPE_STRING: {
+      type_id = TypeId::VARCHAR;
+      break;
+    }
+    case ColType::TYPE_TIMESTAMP: {
+      type_id = TypeId::TIMESTAMP;
+      break;
+    }
+    default: {
+      type_id = TypeId::INVALID;
+    }
     }
   }
   // inline Column(ColMeta col_meta)
   //     : col_name_(col_meta.name), col_len_(col_meta.len),
   //       type_id(col_meta.type), col_offset_(col_meta.offset) {}
-  Column(std::string col_name, ColType col_type, size_t col_len, size_t offset)
+  Column(std::string col_name, TypeId col_type, size_t col_len, size_t offset)
       : col_name_(std::move(col_name)), type_id(col_type), col_len_(col_len),
         col_offset_(offset) {
-    if (type_id != ColType::TYPE_STRING) {
+    if (type_id != TypeId::VARCHAR) {
       LOG_WARNING("column: %s\tonly string type needs length.\n",
                   col_name_.c_str());
     }
   }
-  Column *setLen(int len) {
+  static auto TypeSize(TypeId type) -> uint8_t {
+    switch (type) {
+    case TypeId::BOOLEAN:
+    case TypeId::TINYINT:
+      return 1;
+    case TypeId::SMALLINT:
+      return 2;
+    case TypeId::INTEGER:
+      return 4;
+    case TypeId::BIGINT:
+    case TypeId::DECIMAL:
+    case TypeId::TIMESTAMP:
+      return 8;
+    case TypeId::VARCHAR:
+      // TODO(Amadou): Confirm this.
+      return 12;
+    default: {
+      return 0;
+    }
+    }
+  }
+
+  auto setLen(int len) -> Column * {
     this->col_len_ = len;
     return this;
   }
@@ -65,7 +114,7 @@ public:
     c.col_name_ = std::move(col_name);
     return c;
   }
-  bool is_inlined() const { return type_id != ColType::TYPE_STRING; }
+  bool is_inlined() const { return type_id != TypeId::VARCHAR; }
   [[nodiscard]] auto to_string(bool simplified = true) const -> std::string;
   friend std::ostream &operator<<(std::ostream &os, const Column &col) {
     return os << col.to_string();
@@ -83,8 +132,8 @@ public:
 
 private:
   std::string col_name_;
-  ColType type_id;
-  size_t col_len_;
+  TypeId type_id;
+  size_t col_len_{};
   size_t col_offset_{};
 
 private:
@@ -109,4 +158,3 @@ struct fmt::formatter<std::unique_ptr<T>,
     return fmt::formatter<std::string>::format(x->to_string(), ctx);
   }
 };
-} // namespace rmdb

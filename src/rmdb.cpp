@@ -24,6 +24,7 @@ See the Mulan PSL v2 for more details. */
 #include "optimizer/plan.h"
 #include "optimizer/planner.h"
 #include "portal.h"
+#include "record/rm_manager.h"
 #include "recovery/log_recovery.h"
 #include "transaction/transaction.h"
 

@@ -16,9 +16,9 @@ See the Mulan PSL v2 for more details. */
 #include <string>
 #include <vector>
 
-#include "parser/parser.h"
-#include "rmdb_common/common.h"
-#include "system/sm.h"
+#include "common/common.h"
+#include "parser/ast.h"
+#include "system/sm_manager.h"
 
 class Query {
 public:
@@ -33,7 +33,7 @@ public:
   // update 的set 值
   std::vector<SetClause> set_clauses;
   // insert 的values值
-  std::vector<Value> values;
+  std::vector<sValue> values;
 
   Query() {}
 };
@@ -56,6 +56,6 @@ private:
                   std::vector<Condition> &conds);
   void check_clause(const std::vector<std::string> &tab_names,
                     std::vector<Condition> &conds);
-  Value convert_sv_value(const std::shared_ptr<ast::Value> &sv_val);
+  sValue convert_sv_value(const std::shared_ptr<ast::eValue> &sv_val);
   CompOp convert_sv_comp_op(ast::SvCompOp op);
 };

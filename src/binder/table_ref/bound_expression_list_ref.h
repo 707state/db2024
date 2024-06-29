@@ -1,9 +1,7 @@
 #pragma once
 
 #include "binder/bound_table_ref.h"
-#include "catalog/schema.h"
 #include "fmt/core.h"
-#include "type/type.h"
 #include <memory>
 #include <string>
 #include <utility>

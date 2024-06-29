@@ -51,24 +51,24 @@ public:
   std::unique_ptr<BoundExpression> condition_;
 };
 
-template <> struct fmt::formatter<bustub::JoinType> : formatter<string_view> {
+template <> struct fmt::formatter<JoinType> : formatter<string_view> {
   template <typename FormatContext>
-  auto format(bustub::JoinType c, FormatContext &ctx) const {
+  auto format(JoinType c, FormatContext &ctx) const {
     string_view name;
     switch (c) {
-    case bustub::JoinType::INVALID:
+    case JoinType::INVALID:
       name = "Invalid";
       break;
-    case bustub::JoinType::LEFT:
+    case JoinType::LEFT:
       name = "Left";
       break;
-    case bustub::JoinType::RIGHT:
+    case JoinType::RIGHT:
       name = "Right";
       break;
-    case bustub::JoinType::INNER:
+    case JoinType::INNER:
       name = "Inner";
       break;
-    case bustub::JoinType::OUTER:
+    case JoinType::OUTER:
       name = "Outer";
       break;
     default:

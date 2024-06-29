@@ -48,10 +48,10 @@ public:
 
 template <typename T>
 struct fmt::formatter<
-    T, std::enable_if_t<std::is_base_of<rmdb::BoundOrderBy, T>::value, char>>
+    T, std::enable_if_t<std::is_base_of<BoundOrderBy, T>::value, char>>
     : fmt::formatter<std::string> {
   template <typename FormatCtx>
-  auto format(const rmdb::BoundOrderBy &x, FormatCtx &ctx) const {
+  auto format(const BoundOrderBy &x, FormatCtx &ctx) const {
     return fmt::formatter<std::string>::format(x.ToString(), ctx);
   }
 };
@@ -59,30 +59,29 @@ struct fmt::formatter<
 template <typename T>
 struct fmt::formatter<
     std::unique_ptr<T>,
-    std::enable_if_t<std::is_base_of<rmdb::BoundOrderBy, T>::value, char>>
+    std::enable_if_t<std::is_base_of<BoundOrderBy, T>::value, char>>
     : fmt::formatter<std::string> {
   template <typename FormatCtx>
-  auto format(const std::unique_ptr<rmdb::BoundOrderBy> &x,
-              FormatCtx &ctx) const {
+  auto format(const std::unique_ptr<BoundOrderBy> &x, FormatCtx &ctx) const {
     return fmt::formatter<std::string>::format(x->ToString(), ctx);
   }
 };
 
-template <> struct fmt::formatter<rmdb::OrderByType> : formatter<string_view> {
+template <> struct fmt::formatter<OrderByType> : formatter<string_view> {
   template <typename FormatContext>
-  auto format(rmdb::OrderByType c, FormatContext &ctx) const {
+  auto format(OrderByType c, FormatContext &ctx) const {
     string_view name;
     switch (c) {
-    case rmdb::OrderByType::INVALID:
+    case OrderByType::INVALID:
       name = "Invalid";
       break;
-    case rmdb::OrderByType::ASC:
+    case OrderByType::ASC:
       name = "Ascending";
       break;
-    case rmdb::OrderByType::DESC:
+    case OrderByType::DESC:
       name = "Descending";
       break;
-    case rmdb::OrderByType::DEFAULT:
+    case OrderByType::DEFAULT:
       name = "Default";
       break;
     default:

@@ -15,7 +15,6 @@ See the Mulan PSL v2 for more details. */
 /**
  * Replacer is an abstract class that tracks page usage.
  */
-namespace rmdb {
 class Replacer {
 public:
   Replacer() = default;
@@ -31,7 +30,7 @@ public:
    * @param frame_id_t* frame_id
    * @return 如果victim page被找到就返回true, 否则为false
    */
-  virtual bool victim(rmdb::frame_id_t *frame_id) = 0;
+  virtual bool victim(frame_id_t *frame_id) = 0;
 
   /**
    * Pins a frame, indicating that it should not be victimized until it is
@@ -43,7 +42,7 @@ public:
    * @param frame_id_t frame_id. 被固定的frame
    * @return 无返回值
    */
-  virtual void pin(rmdb::frame_id_t frame_id) = 0;
+  virtual void pin(frame_id_t frame_id) = 0;
 
   /**
    * Unpins a frame, indicating that it can now be victimized.
@@ -53,9 +52,8 @@ public:
    * @param frame_id_t frame_id
    *@return 无返回值
    */
-  virtual void unpin(rmdb::frame_id_t frame_id) = 0;
+  virtual void unpin(frame_id_t frame_id) = 0;
 
   /** @return the number of elements in the replacer that can be victimized */
   virtual size_t Size() = 0;
 };
-} // namespace rmdb

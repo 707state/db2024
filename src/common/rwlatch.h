@@ -17,7 +17,6 @@
 
 #include "common/macros.h"
 
-namespace rmdb {
 
 /**
  * Reader-Writer latch backed by std::mutex.
@@ -48,4 +47,3 @@ private:
   std::shared_mutex mutex_;
 };
 
-} // namespace rmdb

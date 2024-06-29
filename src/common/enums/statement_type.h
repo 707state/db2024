@@ -21,43 +21,42 @@ enum class StatementType : uint8_t {
   VARIABLE_SHOW_STATEMENT, // show variable statement type
 };
 
-template <>
-struct fmt::formatter<rmdb::StatementType> : formatter<string_view> {
+template <> struct fmt::formatter<StatementType> : formatter<string_view> {
   template <typename FormatContext>
-  auto format(rmdb::StatementType c, FormatContext &ctx) const {
+  auto format(StatementType c, FormatContext &ctx) const {
     string_view name;
     switch (c) {
-    case rmdb::StatementType::INVALID_STATEMENT:
+    case StatementType::INVALID_STATEMENT:
       name = "Invalid";
       break;
-    case rmdb::StatementType::SELECT_STATEMENT:
+    case StatementType::SELECT_STATEMENT:
       name = "Select";
       break;
-    case rmdb::StatementType::INSERT_STATEMENT:
+    case StatementType::INSERT_STATEMENT:
       name = "Insert";
       break;
-    case rmdb::StatementType::UPDATE_STATEMENT:
+    case StatementType::UPDATE_STATEMENT:
       name = "Update";
       break;
-    case rmdb::StatementType::CREATE_STATEMENT:
+    case StatementType::CREATE_STATEMENT:
       name = "Create";
       break;
-    case rmdb::StatementType::DELETE_STATEMENT:
+    case StatementType::DELETE_STATEMENT:
       name = "Delete";
       break;
-    case rmdb::StatementType::EXPLAIN_STATEMENT:
+    case StatementType::EXPLAIN_STATEMENT:
       name = "Explain";
       break;
-    case rmdb::StatementType::DROP_STATEMENT:
+    case StatementType::DROP_STATEMENT:
       name = "Drop";
       break;
-    case rmdb::StatementType::INDEX_STATEMENT:
+    case StatementType::INDEX_STATEMENT:
       name = "Index";
       break;
-    case rmdb::StatementType::VARIABLE_SHOW_STATEMENT:
+    case StatementType::VARIABLE_SHOW_STATEMENT:
       name = "VariableShow";
       break;
-    case rmdb::StatementType::VARIABLE_SET_STATEMENT:
+    case StatementType::VARIABLE_SET_STATEMENT:
       name = "VariableSet";
       break;
     }

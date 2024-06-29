@@ -31,8 +31,7 @@ auto Binder::BindInsert(duckdb_libpgquery::PGInsertStmt *pg_stmt)
   auto table = BindBaseTableRef(pg_stmt->relation->relname, std::nullopt);
 
   if (StringUtil::StartsWith(table->table_, "__")) {
-    throw rmdb::Exception(
-        fmt::format("invalid table for insert: {}", table->table_));
+    throw Exception(fmt::format("invalid table for insert: {}", table->table_));
   }
 
   auto select_statement = BindSelect(
@@ -60,11 +59,11 @@ auto Binder::BindDelete(duckdb_libpgquery::PGDeleteStmt *stmt)
 auto Binder::BindUpdate(duckdb_libpgquery::PGUpdateStmt *stmt)
     -> std::unique_ptr<UpdateStatement> {
   if (stmt->withClause != nullptr) {
-    throw rmdb::NotImplementedException("update with clause not supported yet");
+    throw NotImplementedException("update with clause not supported yet");
   }
 
   if (stmt->fromClause != nullptr) {
-    throw rmdb::NotImplementedException("update from clause not supported yet");
+    throw NotImplementedException("update from clause not supported yet");
   }
 
   auto table = BindBaseTableRef(stmt->relation->relname, std::nullopt);

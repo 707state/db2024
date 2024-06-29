@@ -17,9 +17,6 @@
 #include "binder/expressions/bound_column_ref.h"
 #include "binder/table_ref/bound_base_table_ref.h"
 #include "binder/tokens.h"
-#include "catalog/column.h"
-#include "common/enums/statement_type.h"
-#include "type/value.h"
 
 class UpdateStatement : public BoundStatement {
 public:

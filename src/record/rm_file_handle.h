@@ -10,16 +10,17 @@ See the Mulan PSL v2 for more details. */
 
 #pragma once
 
-#include <assert.h>
+#include <cassert>
 
 #include <memory>
 
 #include "bitmap.h"
 #include "common/context.h"
 #include "rm_defs.h"
+#include "storage/buffer_pool_manager.h"
+#include "storage/page.h"
 
 class RmManager;
-namespace rmdb {
 /* 对表数据文件中的页面进行封装 */
 struct RmPageHandle {
   // 当前页面所在文件的文件头指针
@@ -103,4 +104,3 @@ private:
 
   void release_page_handle(RmPageHandle &page_handle);
 };
-}; // namespace rmdb
