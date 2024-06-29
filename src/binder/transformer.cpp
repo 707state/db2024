@@ -18,8 +18,6 @@
 #include "type/decimal_type.h"
 #include <memory>
 
-namespace rmdb {
-
 void Binder::SaveParseTree(duckdb_libpgquery::PGList *tree) {
   std::vector<std::unique_ptr<BoundStatement>> statements;
   for (auto entry = tree->head; entry != nullptr; entry = entry->next) {
@@ -64,5 +62,3 @@ auto Binder::BindStatement(duckdb_libpgquery::PGNode *stmt)
     throw NotImplementedException(NodeTagToString(stmt->type));
   }
 }
-
-} // namespace rmdb

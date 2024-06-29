@@ -17,7 +17,6 @@ See the Mulan PSL v2 for more details. */
 #include <memory>
 #include <string>
 #include <vector>
-
 struct TabCol {
   std::string tab_name;
   std::string col_name;

@@ -10,4 +10,4 @@ set(SOURCES
     executor_projection.cpp)
 add_library(execution STATIC ${SOURCES})
 
-target_link_libraries(execution system record transaction planner)
+target_link_libraries(execution system record transaction planner common )

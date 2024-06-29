@@ -6,8 +6,6 @@
 #include <utility>
 #include <vector>
 
-namespace rmdb {
-
 /**
  * A bound unary operation, e.g., `-x`.
  */
@@ -32,4 +30,3 @@ public:
   /** Argument of the op. */
   std::unique_ptr<BoundExpression> arg_;
 };
-} // namespace rmdb

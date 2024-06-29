@@ -7,8 +7,6 @@
 
 #include "binder/bound_expression.h"
 
-namespace rmdb {
-
 /**
  * A bound binary operator, e.g., `a+b`.
  */
@@ -38,4 +36,3 @@ public:
   /** Right argument of the op. */
   std::unique_ptr<BoundExpression> rarg_;
 };
-} // namespace rmdb

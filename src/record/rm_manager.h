@@ -15,7 +15,7 @@ See the Mulan PSL v2 for more details. */
 #include "bitmap.h"
 #include "rm_defs.h"
 #include "rm_file_handle.h"
-
+namespace rmdb {
 /* 记录管理器，用于管理表的数据文件，进行文件的创建、打开、删除、关闭 */
 class RmManager {
 private:
@@ -95,3 +95,4 @@ public:
     disk_manager_->close_file(file_handle->fd_);
   }
 };
+} // namespace rmdb

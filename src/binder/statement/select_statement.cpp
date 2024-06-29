@@ -10,8 +10,6 @@
 #include "binder/bound_table_ref.h"
 #include "binder/statement/select_statement.h"
 
-namespace rmdb {
-
 auto SelectStatement::ToString() const -> std::string {
   return fmt::format(
       "BoundSelect {{\n  table={},\n  columns={},\n  groupBy={},\n  "
@@ -23,5 +21,3 @@ auto SelectStatement::ToString() const -> std::string {
       StringUtil::IndentAllLines(fmt::format("{}", fmt::join(ctes_, ",\n")), 2,
                                  true));
 }
-
-} // namespace rmdb

@@ -1,7 +1,7 @@
 #pragma once
 #include "type/integer_parent_type.h"
 #include <string>
-
+namespace rmdb {
 // An integer value of the common sizes.
 class BigintType : public IntegerParentType {
 public:
@@ -51,3 +51,4 @@ protected:
 
   auto IsZero(const Value &val) const -> bool override;
 };
+} // namespace rmdb

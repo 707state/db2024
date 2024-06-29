@@ -21,8 +21,6 @@
 #include "common/enums/statement_type.h"
 #include "type/value.h"
 
-namespace rmdb {
-
 class UpdateStatement : public BoundStatement {
 public:
   explicit UpdateStatement(
@@ -42,5 +40,3 @@ public:
 
   auto ToString() const -> std::string override;
 };
-
-} // namespace rmdb

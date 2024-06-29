@@ -6,8 +6,6 @@
 #include "binder/bound_expression.h"
 #include "type/value.h"
 
-namespace rmdb {
-
 class BoundExpression;
 
 /**
@@ -25,4 +23,3 @@ public:
   /** The constant being bound. */
   Value val_;
 };
-} // namespace rmdb

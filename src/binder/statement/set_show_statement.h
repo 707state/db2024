@@ -15,8 +15,6 @@
 #include "common/enums/statement_type.h"
 #include "fmt/format.h"
 
-namespace rmdb {
-
 class VariableSetStatement : public BoundStatement {
 public:
   explicit VariableSetStatement(std::string variable, std::string value)
@@ -44,5 +42,3 @@ public:
     return fmt::format("BoundVariableShow {{ variable={} }}", variable_);
   }
 };
-
-} // namespace rmdb

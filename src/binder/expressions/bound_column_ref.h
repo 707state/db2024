@@ -10,8 +10,6 @@
 #include "binder/bound_expression.h"
 #include "common/macros.h"
 
-namespace rmdb {
-
 /**
  * A bound column reference, e.g., `y.x` in the SELECT list.
  */
@@ -41,4 +39,3 @@ public:
   /** The name of the column. */
   std::vector<std::string> col_name_;
 };
-} // namespace rmdb

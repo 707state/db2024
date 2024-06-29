@@ -4,8 +4,6 @@
 #include <iostream>
 #include <string>
 
-namespace rmdb {
-
 /** Simplified tokens are a simplified (dense) representation of the lexer
  * used for simple syntax highlighting in the tests. */
 enum class SimplifiedTokenType : uint8_t {
@@ -33,5 +31,3 @@ struct ParserKeyword {
   std::string name_;
   KeywordCategory category_;
 };
-
-} // namespace rmdb

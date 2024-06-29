@@ -5,8 +5,6 @@
 #include <string>
 #include <utility>
 
-namespace rmdb {
-
 /**
  * The alias in SELECT list, e.g. `SELECT count(x) AS y`, the `y` is an alias.
  */
@@ -30,4 +28,3 @@ public:
   /** The actual expression */
   std::unique_ptr<BoundExpression> child_;
 };
-} // namespace rmdb

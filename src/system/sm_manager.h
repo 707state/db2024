@@ -1,13 +1,3 @@
-/* Copyright (c) 2023 Renmin University of China
-RMDB is licensed under Mulan PSL v2.
-You can use this software according to the terms and conditions of the Mulan PSL
-v2. You may obtain a copy of Mulan PSL v2 at:
-        http://license.coscl.org.cn/MulanPSL2
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS, WITHOUT WARRANTIES OF ANY KIND,
-EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO NON-INFRINGEMENT,
-MERCHANTABILITY OR FIT FOR A PARTICULAR PURPOSE.
-See the Mulan PSL v2 for more details. */
-
 #pragma once
 
 #include "common/context.h"
@@ -17,7 +7,7 @@ See the Mulan PSL v2 for more details. */
 #include "sm_defs.h"
 #include "sm_meta.h"
 #include <optional>
-
+namespace rmdb {
 class Context;
 
 struct ColDef {
@@ -53,45 +43,46 @@ public:
   RmManager *get_rm_manager() { return rm_manager_; }
 
   IxManager *get_ix_manager() { return ix_manager_; }
-  RC_VALUES is_dir_rc(const std::string &db_name);
+  rmdb::RC_VALUES is_dir_rc(const std::string &db_name);
   bool is_dir(const std::string &db_name);
-  RC_VALUES create_db_rc(const std::string &db_name);
+  rmdb::RC_VALUES create_db_rc(const std::string &db_name);
   void create_db(const std::string &db_name);
-  RC_VALUES drop_db_rc(const std::string &db_name);
+  rmdb::RC_VALUES drop_db_rc(const std::string &db_name);
   void drop_db(const std::string &db_name);
-  RC_VALUES open_db_rc(const std::string &db_name);
+  rmdb::RC_VALUES open_db_rc(const std::string &db_name);
   void open_db(const std::string &db_name);
-  RC_VALUES close_db_rc();
+  rmdb::RC_VALUES close_db_rc();
   void close_db();
-  RC_VALUES flush_meta_rc();
+  rmdb::RC_VALUES flush_meta_rc();
   void flush_meta();
   void show_tables(Context *context);
   void desc_table(const std::string &tab_name, Context *context);
-  RC_VALUES create_table_rc(const std::string &tab_name,
-                            const std::vector<ColDef> &col_def,
-                            Context *context);
+  rmdb::RC_VALUES create_table_rc(const std::string &tab_name,
+                                  const std::vector<ColDef> &col_def,
+                                  Context *context);
   void create_table(const std::string &tab_name,
                     const std::vector<ColDef> &col_defs, Context *context);
 
   std::optional<int> add_table_cols(const std::string &tab_name,
                                     const std::vector<ColDef> &col_defs,
                                     Context *context);
-  RC_VALUES drop_table_rc(const std::string &tab_name, Context *context);
+  rmdb::RC_VALUES drop_table_rc(const std::string &tab_name, Context *context);
   void drop_table(const std::string &tab_name, Context *context);
-  RC_VALUES create_index_rc(const std::string &tab_name,
-                            const std::vector<std::string> &col_names,
-                            Context *context);
+  rmdb::RC_VALUES create_index_rc(const std::string &tab_name,
+                                  const std::vector<std::string> &col_names,
+                                  Context *context);
   void create_index(const std::string &tab_name,
                     const std::vector<std::string> &col_names,
                     Context *context);
-  RC_VALUES drop_index_rc(const std::string &tab_name,
-                          const std::vector<std::string> &col_names,
-                          Context *context);
+  rmdb::RC_VALUES drop_index_rc(const std::string &tab_name,
+                                const std::vector<std::string> &col_names,
+                                Context *context);
   void drop_index(const std::string &tab_name,
                   const std::vector<std::string> &col_names, Context *context);
-  RC_VALUES drop_index_rc(const std::string &tab_name,
-                          const std::vector<ColMeta> &col_names,
-                          Context *context);
+  rmdb::RC_VALUES drop_index_rc(const std::string &tab_name,
+                                const std::vector<ColMeta> &col_names,
+                                Context *context);
   void drop_index(const std::string &tab_name,
                   const std::vector<ColMeta> &col_names, Context *context);
 };
+} // namespace rmdb

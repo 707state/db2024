@@ -4,8 +4,6 @@
 
 #include "common/config.h"
 
-namespace rmdb {
-
 class KeywordHelper {
 public:
   /** Return true if the given text matches a keyword of the parser. */
@@ -20,5 +18,3 @@ public:
   static auto WriteOptionallyQuoted(const std::string &text,
                                     char quote = '"') -> std::string;
 };
-
-} // namespace rmdb

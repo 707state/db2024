@@ -7,8 +7,6 @@
 
 #include "common/macros.h"
 
-namespace rmdb {
-
 /**
  * Table reference types.
  */
@@ -52,8 +50,6 @@ public:
   /** The type of table reference. */
   TableReferenceType type_{TableReferenceType::INVALID};
 };
-
-} // namespace rmdb
 
 template <typename T>
 struct fmt::formatter<

@@ -15,7 +15,7 @@ See the Mulan PSL v2 for more details. */
 #include "transaction/transaction.h"
 
 // class TransactionManager;
-
+namespace rmdb {
 // used for data_send
 static int const_offset = -1;
 
@@ -36,3 +36,4 @@ public:
   int *offset_;
   bool ellipsis_;
 };
+}; // namespace rmdb

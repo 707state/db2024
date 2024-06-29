@@ -4,6 +4,7 @@
 #include <string>
 
 #include "type/bigint_type.h"
+namespace rmdb {
 #define BIGINT_COMPARE_FUNC(OP)                                                \
   switch (right.GetTypeId()) {                                                 \
   case TypeId::TINYINT:                                                        \
@@ -337,3 +338,4 @@ auto BigintType::CastAs(const Value &val, const TypeId type_id) const -> Value {
   throw Exception("bigint is not coercable to " +
                   Type::TypeIdToString(type_id));
 }
+} // namespace rmdb

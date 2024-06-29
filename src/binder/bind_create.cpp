@@ -29,8 +29,6 @@
 #include <memory>
 #include <string>
 
-namespace rmdb {
-
 auto Binder::BindColumnDefinition(duckdb_libpgquery::PGColumnDef *cdef)
     -> Column {
   std::string colname;
@@ -124,5 +122,3 @@ auto Binder::BindIndex(duckdb_libpgquery::PGIndexStmt *stmt)
   return std::make_unique<IndexStatement>(stmt->idxname, std::move(table),
                                           std::move(cols));
 }
-
-} // namespace rmdb

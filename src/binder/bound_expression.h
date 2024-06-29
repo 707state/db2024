@@ -5,8 +5,6 @@
 #include <memory>
 #include <string>
 
-namespace rmdb {
-
 /**
  * All types of expressions in binder.
  */
@@ -44,8 +42,6 @@ public:
   /** The type of this expression. */
   ExpressionType type_{ExpressionType::INVALID};
 };
-
-} // namespace rmdb
 
 template <typename T>
 struct fmt::formatter<

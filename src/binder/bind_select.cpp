@@ -39,8 +39,6 @@
 #include <optional>
 #include <vector>
 
-namespace rmdb {
-
 auto Binder::BindValuesList(duckdb_libpgquery::PGList *list)
     -> std::unique_ptr<BoundExpressionListRef> {
   std::vector<std::vector<std::unique_ptr<BoundExpression>>> all_values;
@@ -1014,5 +1012,3 @@ auto Binder::BindSort(duckdb_libpgquery::PGList *list)
   }
   return order_by;
 }
-
-} // namespace rmdb

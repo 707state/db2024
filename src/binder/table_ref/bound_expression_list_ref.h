@@ -9,8 +9,6 @@
 #include <utility>
 #include <vector>
 
-namespace rmdb {
-
 class BoundExpression;
 
 /**
@@ -33,4 +31,3 @@ public:
    * work correctly. */
   std::string identifier_;
 };
-} // namespace rmdb

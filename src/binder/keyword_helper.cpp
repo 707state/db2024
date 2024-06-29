@@ -3,8 +3,6 @@
 #include "binder/binder.h"
 #include "common/util/string_util.h"
 
-namespace rmdb {
-
 auto KeywordHelper::IsKeyword(const std::string &text) -> bool {
   return Binder::IsKeyword(text);
 }
@@ -35,5 +33,3 @@ auto KeywordHelper::WriteOptionallyQuoted(const std::string &text,
                              std::string(2, quote)) +
          std::string(1, quote);
 }
-
-} // namespace rmdb

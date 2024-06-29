@@ -21,8 +21,6 @@
 
 #include "type/value_factory.h"
 
-namespace rmdb {
-
 auto Binder::BindInsert(duckdb_libpgquery::PGInsertStmt *pg_stmt)
     -> std::unique_ptr<InsertStatement> {
   if (pg_stmt->cols != nullptr) {
@@ -99,5 +97,3 @@ auto Binder::BindUpdate(duckdb_libpgquery::PGUpdateStmt *stmt)
   return std::make_unique<UpdateStatement>(
       std::move(table), std::move(filter_expr), std::move(target_expr));
 }
-
-} // namespace rmdb

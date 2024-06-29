@@ -5,8 +5,6 @@
 #include <string>
 #include <utility>
 
-namespace rmdb {
-
 /**
  * The star in SELECT list, e.g. `SELECT * FROM x`.
  */
@@ -21,4 +19,3 @@ public:
 
   auto ToString() const -> std::string override { return "*"; }
 };
-} // namespace rmdb

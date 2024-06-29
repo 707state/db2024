@@ -12,7 +12,7 @@ See the Mulan PSL v2 for more details. */
 
 #include <cinttypes>
 #include <cstring>
-
+namespace rmdb {
 static constexpr int BITMAP_WIDTH = 8;
 static constexpr unsigned BITMAP_HIGHEST_BIT = 0x80u; // 128 (2^7)
 
@@ -69,3 +69,4 @@ private:
     return BITMAP_HIGHEST_BIT >> static_cast<char>(pos % BITMAP_WIDTH);
   }
 };
+} // namespace rmdb

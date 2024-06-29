@@ -18,7 +18,7 @@ See the Mulan PSL v2 for more details. */
 
 #include "errors.h"
 #include "sm_defs.h"
-
+namespace rmdb {
 /* 字段元数据 */
 struct ColMeta {
   std::string tab_name; // 字段所属表名称
@@ -224,3 +224,4 @@ public:
     return is;
   }
 };
+} // namespace rmdb

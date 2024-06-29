@@ -16,8 +16,8 @@ See the Mulan PSL v2 for more details. */
 #include <string>
 #include <vector>
 
-#include "common/common.h"
 #include "parser/parser.h"
+#include "rmdb_common/common.h"
 #include "system/sm.h"
 
 class Query {

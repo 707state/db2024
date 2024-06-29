@@ -32,7 +32,7 @@ See the Mulan PSL v2 for more details. */
 #include "record/rm.h"
 #include "record_printer.h"
 #include "system/sm_meta.h"
-
+namespace rmdb {
 /**
  * @description: 判断是否为一个文件夹
  * @return {bool} 返回是否为一个文件夹
@@ -47,12 +47,12 @@ bool SmManager::is_dir(const std::string &db_name) {
  * @return {RC_VALUES}
  * @param {string&} db_name 数据库文件名称，与文件夹同名
  */
-RC_VALUES SmManager::is_dir_rc(const std::string &db_name) {
+rmdb::RC_VALUES SmManager::is_dir_rc(const std::string &db_name) {
   struct stat st {};
   if (stat(db_name.c_str(), &st) == 0 && S_ISDIR(st.st_mode)) {
-    return RC_VALUES::RC_SUCCESS;
+    return rmdb::RC_VALUES::RC_SUCCESS;
   } else {
-    return RC_VALUES::RC_SM_MANAGER_ERROR;
+    return rmdb::RC_VALUES::RC_SM_MANAGER_ERROR;
   }
 }
 /**
@@ -102,16 +102,16 @@ void SmManager::create_db(const std::string &db_name) {
  * @param {string&} db_name 数据库名称
  * @return {RC_VALUES}: 是否创建成功
  */
-RC_VALUES SmManager::create_db_rc(const std::string &db_name) {
+rmdb::RC_VALUES SmManager::create_db_rc(const std::string &db_name) {
   if (is_dir(db_name)) {
-    return RC_VALUES::RC_SM_MANAGER_EXISTS_DB;
+    return rmdb::RC_VALUES::RC_SM_MANAGER_EXISTS_DB;
   }
   // 为数据库创建一个子目录
   if (mkdir(db_name.c_str(), S_IRWXU) < 0) { // 创建一个名为db_name的目录
-    return RC_VALUES::RC_UNIX_ERROR;
+    return rmdb::RC_VALUES::RC_UNIX_ERROR;
   }
   if (chdir(db_name.c_str()) < 0) { // 进入名为db_name的目录
-    return RC_VALUES::RC_UNIX_ERROR;
+    return rmdb::RC_VALUES::RC_UNIX_ERROR;
   }
   // 创建系统目录
   auto *new_db = new DbMeta();
@@ -130,9 +130,9 @@ RC_VALUES SmManager::create_db_rc(const std::string &db_name) {
 
   // 回到根目录
   if (chdir("..") < 0) {
-    return RC_VALUES::RC_UNIX_ERROR;
+    return rmdb::RC_VALUES::RC_UNIX_ERROR;
   }
-  return RC_VALUES::RC_SUCCESS;
+  return rmdb::RC_VALUES::RC_SUCCESS;
 }
 /**
  * @description: 删除数据库，同时需要清空相关文件以及数据库同名文件夹
@@ -155,15 +155,15 @@ void SmManager::drop_db(const std::string &db_name) {
  * @description: 删除数据库，同时需要清空相关文件以及数据库同名文件夹
  * @param {string&} db_name 数据库名称，与文件夹同名
  */
-RC_VALUES SmManager::drop_db_rc(const std::string &db_name) {
+rmdb::RC_VALUES SmManager::drop_db_rc(const std::string &db_name) {
   if (!is_dir(db_name)) {
-    return RC_VALUES::RC_UNIX_ERROR;
+    return rmdb::RC_VALUES::RC_UNIX_ERROR;
   }
   // std::string cmd = "rm -r " + db_name;
   if (rmdir(db_name.c_str()) < 0) {
-    return RC_VALUES::RC_UNIX_ERROR;
+    return rmdb::RC_VALUES::RC_UNIX_ERROR;
   }
-  return RC_VALUES::RC_SUCCESS;
+  return rmdb::RC_VALUES::RC_SUCCESS;
 }
 /**
  * @description:
@@ -205,11 +205,11 @@ void SmManager::open_db(const std::string &db_name) {
  * @param {string&} db_name 数据库名称，与文件夹同名
  * @return {RC_VALUES}
  */
-RC_VALUES SmManager::open_db_rc(const std::string &db_name) {
+rmdb::RC_VALUES SmManager::open_db_rc(const std::string &db_name) {
   // 进入路径
   auto &&chdir_result = chdir(db_name.c_str());
   if (chdir_result < 0) {
-    return RC_VALUES::RC_UNIX_ERROR;
+    return rmdb::RC_VALUES::RC_UNIX_ERROR;
   }
   std::ifstream ifs(DB_META_NAME);
   // Db重载了>>
@@ -226,7 +226,7 @@ RC_VALUES SmManager::open_db_rc(const std::string &db_name) {
                          ix_manager_->open_index(tab_name, index.cols)));
     }
   }
-  return RC_VALUES::RC_SUCCESS;
+  return rmdb::RC_VALUES::RC_SUCCESS;
 }
 /**
  * @description: 把数据库相关的元数据刷入磁盘中
@@ -240,14 +240,14 @@ void SmManager::flush_meta() {
  * @description: 把数据库相关的元数据刷入磁盘中
  * @return {RC_VALUES}
  */
-RC_VALUES SmManager::flush_meta_rc() {
+rmdb::RC_VALUES SmManager::flush_meta_rc() {
   try {
     std::ofstream ofs(DB_META_NAME);
     ofs << db_;
-    return RC_VALUES::RC_SUCCESS;
+    return rmdb::RC_VALUES::RC_SUCCESS;
   } catch (std::exception &e) {
     std::cout << e.what();
-    return RC_VALUES::RC_SM_MANAGER_NO_DB;
+    return rmdb::RC_VALUES::RC_SM_MANAGER_NO_DB;
   }
 }
 /**
@@ -275,9 +275,9 @@ void SmManager::close_db() {
  * @description: 关闭数据库并把数据落盘
  * @return{RC_VALUES}
  */
-RC_VALUES SmManager::close_db_rc() {
+rmdb::RC_VALUES SmManager::close_db_rc() {
   auto rc = flush_meta_rc();
-  if (rc != RC_VALUES::RC_SUCCESS) {
+  if (rc != rmdb::RC_VALUES::RC_SUCCESS) {
     LOG_WARNING("Error in SmManager::close_db_rc.\nFile: %s, Line: %d",
                 __FILE__, __LINE__);
     return rc;
@@ -294,7 +294,7 @@ RC_VALUES SmManager::close_db_rc() {
   db_.tabs_.clear();
   fhs_.clear();
   ihs_.clear();
-  return RC_VALUES::RC_SUCCESS;
+  return rmdb::RC_VALUES::RC_SUCCESS;
 }
 /**
  * @description:
@@ -697,3 +697,4 @@ RC_VALUES SmManager::drop_index_rc(const std::string &tab_name,
     return RC_VALUES::RC_SM_MANAGER_NO_INDEX;
   }
 }
+} // namespace rmdb

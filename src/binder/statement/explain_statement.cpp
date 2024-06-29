@@ -9,8 +9,6 @@
 #include "binder/statement/select_statement.h"
 #include "common/util/string_util.h"
 
-namespace rmdb {
-
 ExplainStatement::ExplainStatement(std::unique_ptr<BoundStatement> statement,
                                    uint8_t options)
     : BoundStatement(StatementType::EXPLAIN_STATEMENT),
@@ -21,5 +19,3 @@ auto ExplainStatement::ToString() const -> std::string {
       "BoundExplain {{\n  statement={},\n  options={},\n}}",
       StringUtil::IndentAllLines(statement_->ToString(), 2, true), options_);
 }
-
-} // namespace rmdb

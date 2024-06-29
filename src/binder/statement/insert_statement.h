@@ -16,8 +16,6 @@
 #include "catalog/column.h"
 #include "type/value.h"
 
-namespace rmdb {
-
 class SelectStatement;
 
 class InsertStatement : public BoundStatement {
@@ -31,5 +29,3 @@ public:
 
   auto ToString() const -> std::string override;
 };
-
-} // namespace rmdb

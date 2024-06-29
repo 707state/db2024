@@ -8,8 +8,6 @@
 #include "fmt/format.h"
 #include "fmt/ranges.h"
 
-namespace rmdb {
-
 auto BoundAggCall::ToString() const -> std::string {
   if (is_distinct_) {
     return fmt::format("{}_distinct({})", func_name_, args_);
@@ -36,5 +34,3 @@ auto BoundSubqueryRef::ToString() const -> std::string {
       alias_, StringUtil::IndentAllLines(subquery_->ToString(), 2, true),
       columns);
 }
-
-} // namespace rmdb

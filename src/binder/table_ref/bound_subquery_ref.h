@@ -9,8 +9,6 @@
 #include "binder/bound_table_ref.h"
 #include "fmt/format.h"
 
-namespace rmdb {
-
 class SelectStatement;
 
 /**
@@ -40,5 +38,3 @@ public:
 };
 
 using CTEList = std::vector<std::unique_ptr<BoundSubqueryRef>>;
-
-} // namespace rmdb

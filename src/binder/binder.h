@@ -2,6 +2,7 @@
 #pragma once
 
 #include <memory>
+#include <optional>
 #include <unordered_map>
 #include <vector>
 
@@ -36,9 +37,6 @@ struct PGAExpr;
 struct PGJoinExpr;
 } // namespace duckdb_libpgquery
 
-namespace rmdb {
-
-class Catalog;
 class BoundColumnRef;
 class BoundExpression;
 class BoundTableRef;
@@ -276,5 +274,3 @@ private:
 
   duckdb::PostgresParser parser_;
 };
-
-} // namespace rmdb

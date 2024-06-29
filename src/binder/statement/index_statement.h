@@ -16,8 +16,6 @@
 #include "binder/table_ref/bound_base_table_ref.h"
 #include "catalog/column.h"
 
-namespace rmdb {
-
 class IndexStatement : public BoundStatement {
 public:
   explicit IndexStatement(std::string index_name,
@@ -35,5 +33,3 @@ public:
 
   auto ToString() const -> std::string override;
 };
-
-} // namespace rmdb

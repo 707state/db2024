@@ -17,8 +17,6 @@ namespace duckdb_libpgquery {
 struct PGCreateStmt;
 } // namespace duckdb_libpgquery
 
-namespace rmdb {
-
 class CreateStatement : public BoundStatement {
 public:
   explicit CreateStatement(std::string table, std::vector<Column> columns);
@@ -28,5 +26,3 @@ public:
 
   auto ToString() const -> std::string override;
 };
-
-} // namespace rmdb

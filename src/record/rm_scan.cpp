@@ -13,7 +13,7 @@ See the Mulan PSL v2 for more details. */
 #include "record/bitmap.h"
 #include "record/rm_defs.h"
 #include "rm_file_handle.h"
-
+namespace rmdb {
 /**
  * @brief 初始化file_handle和rid
  * @param file_handle
@@ -66,3 +66,4 @@ bool RmScan::is_end() const {
  * @brief RmScan内部存放的rid
  */
 Rid RmScan::rid() const { return rid_; }
+} // namespace rmdb

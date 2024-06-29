@@ -13,7 +13,7 @@ See the Mulan PSL v2 for more details. */
 #include "rm_defs.h"
 
 class RmFileHandle;
-
+namespace rmdb {
 class RmScan : public RecScan {
   const RmFileHandle *file_handle_;
   Rid rid_;
@@ -27,3 +27,4 @@ public:
 
   Rid rid() const override;
 };
+} // namespace rmdb

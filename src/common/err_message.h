@@ -4,6 +4,7 @@
 #include <initializer_list>
 #include <string>
 #include <vector>
+namespace rmdb {
 enum class RC_VALUES {
   RC_SUCCESS = 0,
   RC_DISK_MANAGER_NO_FILE,
@@ -149,3 +150,5 @@ enum class LOG_MODES {
   printf("Debug:      ");                                                      \
   printf(format, __VA_ARGS__);                                                 \
   printf("\n");
+
+}; // namespace rmdb

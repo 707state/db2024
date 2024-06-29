@@ -2,8 +2,6 @@
 
 #include "binder/statement/update_statement.h"
 
-namespace rmdb {
-
 UpdateStatement::UpdateStatement(
     std::unique_ptr<BoundBaseTableRef> table,
     std::unique_ptr<BoundExpression> filter_expr,
@@ -19,5 +17,3 @@ auto UpdateStatement::ToString() const -> std::string {
       "BoundUpdate {{\n  table={},\n  filter_expr={},\n  target_expr={},\n}}",
       *table_, *filter_expr_, target_expr_);
 }
-
-} // namespace rmdb

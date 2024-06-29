@@ -1,17 +1,16 @@
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(../deps/libpg_query/)
-include_directories(../deps/libpg_query/src/)
-include_directories(../deps/libpg_query/src/include/)
+include_directories(../deps/libpg_query/include/)
 include_directories(../deps/fmt/include/)
 add_subdirectory(analyze)
+add_subdirectory(common)
 add_subdirectory(record)
 add_subdirectory(index)
 add_subdirectory(system)
 add_subdirectory(execution)
-add_subdirectory(parser)
 add_subdirectory(optimizer)
 add_subdirectory(storage)
-add_subdirectory(common)
+add_subdirectory(parser)
 add_subdirectory(replacer)
 add_subdirectory(transaction)
 add_subdirectory(recovery)
@@ -19,7 +18,6 @@ add_subdirectory(test)
 add_subdirectory(type)
 add_subdirectory(binder)
 target_link_libraries(parser execution pthread)
-
 add_executable(rmdb rmdb.cpp)
 target_link_libraries(
   rmdb
@@ -27,10 +25,12 @@ target_link_libraries(
   execution
   readline
   pthread
+  common
   planner
-  analyze)
+  analyze
+)
 
 # unit_test
 add_executable(unit_test unit_test.cpp)
-target_link_libraries(unit_test storage lru_replacer record gtest_main
+target_link_libraries(unit_test storage lru_replacer record gtest_main common
 ) # add gtest

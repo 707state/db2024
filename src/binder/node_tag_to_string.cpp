@@ -1,8 +1,6 @@
 
 #include "binder/binder.h"
 
-namespace rmdb {
-
 auto Binder::NodeTagToString(duckdb_libpgquery::PGNodeTag type) -> std::string {
   switch (type) {
   case duckdb_libpgquery::T_PGInvalid:
@@ -817,5 +815,3 @@ auto Binder::NodeTagToString(duckdb_libpgquery::PGNodeTag type) -> std::string {
     return "(UNKNOWN)";
   }
 } // LCOV_EXCL_STOP
-
-} // namespace rmdb

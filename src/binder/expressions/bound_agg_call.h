@@ -7,8 +7,6 @@
 
 #include "binder/bound_expression.h"
 
-namespace rmdb {
-
 /**
  * A bound aggregate call, e.g., `sum(x)`.
  */
@@ -33,4 +31,3 @@ public:
   /** Arguments of the agg call. */
   std::vector<std::unique_ptr<BoundExpression>> args_;
 };
-} // namespace rmdb

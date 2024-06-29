@@ -15,8 +15,6 @@
 #include "binder/table_ref/bound_base_table_ref.h"
 #include "catalog/column.h"
 
-namespace rmdb {
-
 class DeleteStatement : public BoundStatement {
 public:
   explicit DeleteStatement(std::unique_ptr<BoundBaseTableRef> table,
@@ -28,5 +26,3 @@ public:
 
   auto ToString() const -> std::string override;
 };
-
-} // namespace rmdb

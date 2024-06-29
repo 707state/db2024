@@ -19,7 +19,7 @@ See the Mulan PSL v2 for more details. */
 #include "rm_defs.h"
 
 class RmManager;
-
+namespace rmdb {
 /* 对表数据文件中的页面进行封装 */
 struct RmPageHandle {
   // 当前页面所在文件的文件头指针
@@ -103,3 +103,4 @@ private:
 
   void release_page_handle(RmPageHandle &page_handle);
 };
+}; // namespace rmdb

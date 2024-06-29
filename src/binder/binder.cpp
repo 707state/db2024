@@ -17,8 +17,6 @@
 #include "postgres_parser.hpp"
 #include "type/decimal_type.h"
 
-namespace rmdb {
-
 Binder::Binder(const Catalog &catalog) : catalog_(catalog) {}
 
 void Binder::ParseAndSave(const std::string &query) {
@@ -107,5 +105,3 @@ auto Binder::Tokenize(const std::string &query)
   }
   return result;
 }
-
-} // namespace rmdb

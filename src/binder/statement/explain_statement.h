@@ -20,8 +20,6 @@ enum ExplainOptions : uint8_t {
   SCHEMA = 8,    /**< Show schema. */
 };
 
-namespace rmdb {
-
 class ExplainStatement : public BoundStatement {
 public:
   explicit ExplainStatement(std::unique_ptr<BoundStatement> statement,
@@ -33,5 +31,3 @@ public:
 
   uint8_t options_;
 };
-
-} // namespace rmdb

@@ -16,8 +16,6 @@
 #include "common/exception.h"
 #include "fmt/format.h"
 
-namespace rmdb {
-
 /**
  * All types of order-bys in binder.
  */
@@ -47,8 +45,6 @@ public:
     return fmt::format("BoundOrderBy {{ type={}, expr={} }}", type_, expr_);
   }
 };
-
-} // namespace rmdb
 
 template <typename T>
 struct fmt::formatter<

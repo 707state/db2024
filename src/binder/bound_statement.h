@@ -6,8 +6,6 @@
 #include "common/enums/statement_type.h"
 #include "common/exception.h"
 
-namespace rmdb {
-
 /**
  * BoundStatement is the base class of any type of bound SQL statement.
  */
@@ -25,5 +23,3 @@ public:
     throw Exception("ToString not supported for this type of SQLStatement");
   }
 };
-
-} // namespace rmdb

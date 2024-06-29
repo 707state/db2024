@@ -5,7 +5,6 @@
 #include "binder/statement/set_show_statement.h"
 #include "common/exception.h"
 #include <memory>
-namespace rmdb {
 
 auto Binder::BindVariableSet(duckdb_libpgquery::PGVariableSetStmt *stmt)
     -> std::unique_ptr<VariableSetStatement> {
@@ -25,5 +24,3 @@ auto Binder::BindVariableShow(duckdb_libpgquery::PGVariableShowStmt *stmt)
     -> std::unique_ptr<VariableShowStatement> {
   return std::make_unique<VariableShowStatement>(stmt->name);
 }
-
-} // namespace rmdb
