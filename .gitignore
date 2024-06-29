@@ -1,0 +1,11 @@
+cmake-build-debug
+cmake-build-release
+build
+.idea
+.clang-tidy
+.cache
+compile_commands.json
+.team_info
+team_info
+out
+rmdb_client/build
