@@ -1,5 +1,6 @@
 #include "system/schema.h"
 #include "defs.h"
+#include "format.h"
 #include "system/col_meta.h"
 #include "system/column.h"
 #include "system/sm_meta.h"
@@ -29,6 +30,9 @@ Schema::Schema(const std::vector<Column> &columns, const std::string &tab_name)
                                    static_cast<int>(column.get_len())});
   }
   schema_len_ = curr_offset;
+}
+auto Schema::ToString() const -> std::string {
+  return "Schema::ToString unimplemented";
 }
 
 // Schema::Schema(const std::vector<Column> &columns) {

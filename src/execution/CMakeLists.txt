@@ -8,6 +8,6 @@ set(SOURCES
     executor_seq_scan.cpp
     executor_nestedloop_join.cpp
     executor_projection.cpp)
-add_library(execution STATIC ${SOURCES})
+add_library(execution OBJECT ${SOURCES})
 
-target_link_libraries(execution system record transaction planner common )
+target_link_libraries(execution system record transaction planner common)

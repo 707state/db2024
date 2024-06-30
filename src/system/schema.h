@@ -116,6 +116,7 @@ public:
   inline auto getget_inlined_storaged_size() const { return schema_len_; }
   inline auto inlines() const { return tuple_is_inlined_; }
   auto to_string(bool simplified = true) const -> std::string;
+  auto ToString() const -> std::string;
   std::optional<std::string> tab_name;
   size_t schema_len_;
   std::vector<ColMeta> schema_cols_;
@@ -129,7 +130,7 @@ struct fmt::formatter<T,
     : fmt::formatter<std::string> {
   template <typename FormatCtx>
   auto format(const Schema &x, FormatCtx &ctx) const {
-    return fmt::formatter<std::string>::format(x.to_string(), ctx);
+    return fmt::formatter<std::string>::format(x.ToString(), ctx);
   }
 };
 template <typename T>
@@ -138,7 +139,7 @@ struct fmt::formatter<std::shared_ptr<T>,
     : fmt::formatter<std::string> {
   template <typename FormatCtx>
   auto format(const std::shared_ptr<Schema> &x, FormatCtx &ctx) const {
-    return x ? fmt::formatter<std::string>(x->to_string(), ctx)
+    return x ? fmt::formatter<std::string>(x->ToString(), ctx)
              : fmt::formatter<std::string>("", ctx);
   }
 };
@@ -148,7 +149,7 @@ struct fmt::formatter<std::unique_ptr<T>,
     : fmt::formatter<std::string> {
   template <typename FormatCtx>
   auto format(const std::unique_ptr<Schema> &x, FormatCtx &ctx) const {
-    return x ? fmt::formatter<std::string>(x->to_string(), ctx)
+    return x ? fmt::formatter<std::string>(x->ToString(), ctx)
              : fmt::formatter<std::string>("", ctx);
   }
 };

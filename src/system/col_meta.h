@@ -1,8 +1,12 @@
 #pragma once
+#include "base.h"
 #include "defs.h"
+#include "format.h"
 #include "system/column.h"
 #include "type/type_id.h"
+#include <memory>
 #include <string>
+#include <type_traits>
 #include <utility>
 
 class ColMeta {
@@ -61,5 +65,28 @@ public:
   friend std::istream &operator>>(std::istream &is, ColMeta &col) {
     return is >> col.tab_name >> col.name >> col.type >> col.len >>
            col.offset >> col.index;
+  }
+  std::string ToString() const {
+    return fmt::format("name: {}, type: {}, len:{}", name, typeid2str(type),
+                       len);
+  }
+};
+template <typename T>
+struct fmt::formatter<
+    T, std::enable_if_t<std::is_base_of<ColMeta, T>::value, char>>
+    : fmt::formatter<std::string> {
+  template <typename FormatCtx>
+  auto format(const ColMeta &x, FormatCtx &ctx) const {
+    return fmt::formatter<std::string>::format(x.ToString(), ctx);
+  }
+};
+template <typename T>
+struct fmt::formatter<
+    std::unique_ptr<T>,
+    std::enable_if_t<std::is_base_of<ColMeta, T>::value, char>>
+    : fmt::formatter<std::string> {
+  template <typename FormCtx>
+  auto format(const std::unique_ptr<ColMeta> &x, FormCtx &ctx) {
+    return fmt::formatter<std::string>::format(x->ToString(), ctx);
   }
 };

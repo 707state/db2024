@@ -116,6 +116,7 @@ public:
   }
   bool is_inlined() const { return type_id != TypeId::VARCHAR; }
   [[nodiscard]] auto to_string(bool simplified = true) const -> std::string;
+  auto ToString() const -> std::string;
   friend std::ostream &operator<<(std::ostream &os, const Column &col) {
     return os << col.to_string();
   }
@@ -146,7 +147,7 @@ struct fmt::formatter<T,
     : fmt::formatter<std::string> {
   template <typename FormatCtx>
   auto format(const Column &x, FormatCtx &ctx) const {
-    return fmt::formatter<std::string>::format(x.to_string(), ctx);
+    return fmt::formatter<std::string>::format(x.ToString(), ctx);
   }
 };
 template <typename T>
@@ -155,6 +156,6 @@ struct fmt::formatter<std::unique_ptr<T>,
     : fmt::formatter<std::string> {
   template <typename F>
   auto format(const std::unique_ptr<Column> &x, F &ctx) const {
-    return fmt::formatter<std::string>::format(x->to_string(), ctx);
+    return fmt::formatter<std::string>::format(x->ToString(), ctx);
   }
 };

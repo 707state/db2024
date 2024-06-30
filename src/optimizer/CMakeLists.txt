@@ -1,2 +1,2 @@
 set(SOURCES planner.cpp)
-add_library(planner STATIC ${SOURCES})
+add_library(planner OBJECT ${SOURCES})
