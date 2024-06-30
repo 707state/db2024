@@ -19,7 +19,6 @@ See the Mulan PSL v2 for more details. */
 #include <utility>
 #include <vector>
 
-#include "parser/parser.h"
 #include "system/sm_manager.h"
 
 using PlanTag = enum PlanTag {

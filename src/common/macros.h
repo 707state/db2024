@@ -1,20 +1,7 @@
-//===----------------------------------------------------------------------===//
-//
-//                         rmdb
-//
-// macros.h
-//
-// Identification: src/include/common/macros.h
-//
-// Copyright (c) 2015-2019, Carnegie Mellon University Database Group
-//
-//===----------------------------------------------------------------------===//
-
 #pragma once
 
 #include <cassert>
 #include <stdexcept>
-
 
 #define rmdb_ASSERT(expr, message) assert((expr) && (message))
 
@@ -39,4 +26,3 @@
 #define DISALLOW_COPY_AND_MOVE(cname)                                          \
   DISALLOW_COPY(cname);                                                        \
   DISALLOW_MOVE(cname);
-

@@ -1,17 +1,6 @@
-//===----------------------------------------------------------------------===//
-//
-//                         rmdb
-//
-// exception.h
-//
-// Identification: src/include/common/exception.h
-//
-// Copyright (c) 2015-2019, Carnegie Mellon University Database Group
-//
-//===----------------------------------------------------------------------===//
-
 #pragma once
 
+#include "format.h"
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
@@ -59,7 +48,9 @@ public:
       : std::runtime_error(message), type_(ExceptionType::INVALID) {
 #ifndef NDEBUG
     std::string exception_message = "Message :: " + message + "\n";
-    std::cerr << exception_message;
+    std::cerr << fmt::format("File: {}, line: {}\n\t {}", __FILE__, __LINE__,
+                             exception_message);
+
 #endif
   }
 
@@ -74,7 +65,8 @@ public:
     std::string exception_message =
         "\nException Type :: " + ExceptionTypeToString(type_) +
         "\nMessage :: " + message + "\n";
-    std::cerr << exception_message;
+    std::cerr << fmt::format("File: {}, line: {}\n\t {}", __FILE__, __LINE__,
+                             exception_message);
 #endif
   }
 

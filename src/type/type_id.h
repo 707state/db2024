@@ -86,13 +86,16 @@ inline size_t coltype2len(ColType type, size_t len = 4) {
 inline std::string coltype2str(ColType type) {
   std::map<ColType, std::string> m = {{ColType::TYPE_INT, "INT"},
                                       {ColType::TYPE_FLOAT, "FLOAT"},
-                                      {ColType::TYPE_STRING, "STRING"}};
+                                      {ColType::TYPE_STRING, "STRING"},
+                                      {ColType::TYPE_TIMESTAMP, "TIMESTAMP"},
+                                      {ColType::INVALID, "INVALID"}};
   return m.at(type);
 }
 inline std::string typeid2str(TypeId id) {
   std::map<TypeId, std::string> m = {
       {TypeId::BIGINT, "BIGINT"},   {TypeId::SMALLINT, "SMALLINT"},
       {TypeId::TINYINT, "TINYINT"}, {TypeId::DECIMAL, "FLOAT"},
-      {TypeId::VARCHAR, "STRING"},  {TypeId::TIMESTAMP, "TIMESTAMP"}};
+      {TypeId::VARCHAR, "STRING"},  {TypeId::TIMESTAMP, "TIMESTAMP"},
+      {TypeId::INVALID, "INVALID"}};
   return m.at(id);
 }

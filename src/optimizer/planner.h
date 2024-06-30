@@ -62,11 +62,10 @@ private:
   bool get_index_cols(std::string tab_name, std::vector<Condition> curr_conds,
                       std::vector<std::string> &index_col_names);
 
-  ColType interp_sv_type(ast::SvType sv_type) {
-    std::map<ast::SvType, ColType> m = {
-        {ast::SV_TYPE_INT, ColType::TYPE_INT},
-        {ast::SV_TYPE_FLOAT, ColType::TYPE_FLOAT},
-        {ast::SV_TYPE_STRING, ColType::TYPE_STRING}};
+  TypeId interp_sv_type(ast::SvType sv_type) {
+    std::map<ast::SvType, TypeId> m = {{ast::SV_TYPE_INT, TypeId::INTEGER},
+                                       {ast::SV_TYPE_FLOAT, TypeId::DECIMAL},
+                                       {ast::SV_TYPE_STRING, TypeId::VARCHAR}};
     return m.at(sv_type);
   }
 };

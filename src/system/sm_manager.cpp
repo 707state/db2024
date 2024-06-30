@@ -356,7 +356,7 @@ void SmManager::create_table(const std::string &tab_name,
   TabMeta tab;
   tab.name = tab_name;
   for (auto &col_def : col_defs) {
-    ColMeta col{tab_name,    col_def.name, coltype_to_typeid(col_def.type),
+    ColMeta col{tab_name,    col_def.name, col_def.type,
                 col_def.len, curr_offset,  false};
     curr_offset += col_def.len;
     tab.cols().push_back(col);
@@ -390,7 +390,7 @@ RC_VALUES SmManager::create_table_rc(const std::string &tab_name,
   TabMeta tab;
   tab.name = tab_name;
   for (auto &col_def : col_defs) {
-    ColMeta col = {tab_name,    col_def.name, coltype_to_typeid(col_def.type),
+    ColMeta col = {tab_name,    col_def.name, col_def.type,
                    col_def.len, curr_offset,  false};
     curr_offset += col_def.len;
     tab.cols().push_back(col);
@@ -428,7 +428,7 @@ SmManager::add_table_cols(const std::string &tab_name,
     int curr_offset = db_.tabs_[tab_name].cols().back().offset;
     auto &tab = db_.tabs_[tab_name];
     for (auto &col_def : col_defs) {
-      ColMeta col{tab_name,    col_def.name, coltype_to_typeid(col_def.type),
+      ColMeta col{tab_name,    col_def.name, col_def.type,
                   col_def.len, curr_offset,  false};
       curr_offset += col_def.len;
       tab.cols().emplace_back(col);

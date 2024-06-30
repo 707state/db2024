@@ -41,7 +41,12 @@ struct sValue {
     if (type == ColType::TYPE_INT) {
       int_val = value;
     }
-    throw Exception("Value not right");
+    if (type == ColType::TYPE_FLOAT) {
+      float_val = static_cast<double>(value);
+    }
+    if (type == ColType::TYPE_STRING) {
+      throw Exception("Cannot bind string in this value");
+    }
   }
   explicit sValue(ColType type, double value) {
     if (type == ColType::TYPE_FLOAT) {

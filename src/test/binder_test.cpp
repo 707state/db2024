@@ -1,5 +1,8 @@
 #include "binder/binder.h"
 #include "binder/bound_statement.h"
+#include "system/column.h"
+#include "type/type_id.h"
+#include <exception>
 #include <type_traits>
 #include <utility>
 #include <vector>
@@ -25,10 +28,10 @@ auto rm_manager =
 auto ix_manager =
     std::make_unique<IxManager>(disk_manager.get(), buffer_pool_manager.get());
 auto sm_manager =
-    std::make_unique<SmManager>(disk_manager.get(), buffer_pool_manager.get(),
+    std::make_shared<SmManager>(disk_manager.get(), buffer_pool_manager.get(),
                                 rm_manager.get(), ix_manager.get());
 std::unordered_map<int, char *> mock;
-auto binder = std::make_unique<Binder>(std::move(sm_manager));
+auto binder = std::make_unique<Binder>(sm_manager.get());
 auto TryBind(const std::string query) {
   binder->ParseAndSave(query);
   std::vector<std::unique_ptr<BoundStatement>> statements;
@@ -47,5 +50,21 @@ void PrintStatements(
 
 TEST(BinderTest, BindSelectValue) {
   auto statements = TryBind("select 1");
+  PrintStatements(statements);
+}
+TEST(BinderTest, BindCreateTable) {
+  auto statements = TryBind("create table x (name int)");
+  PrintStatements(statements);
+}
+TEST(BinderTest, NewTable) {
+  std::vector<ColDef> cols;
+  cols.push_back(ColDef{"name", TypeId::INTEGER, 4});
+  cols.push_back(ColDef{"id", TypeId::INTEGER, 4});
+  try {
+    sm_manager->create_table("x", cols, nullptr);
+  } catch (const std::exception &e) {
+    std::cout << e.what();
+  }
+  auto statements = TryBind("select * from x");
   PrintStatements(statements);
 }

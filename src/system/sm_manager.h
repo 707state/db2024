@@ -3,23 +3,38 @@
 #include "common/context.h"
 #include "common/err_message.h"
 #include "common/exception.h"
-#include "index/ix.h"
+#include "index/ix_index_handle.h"
+#include "index/ix_manager.h"
 #include "record/rm_file_handle.h"
-#include "sm_defs.h"
 #include "sm_meta.h"
+#include "system/column.h"
+#include "type/type_id.h"
 #include <memory>
 #include <optional>
+#include <string>
 #include <unordered_map>
+#include <utility>
 class Context;
 
 struct ColDef {
   std::string name; // 该列的名字
-  ColType type;     // 该列的类型
+  TypeId type;      // 该列的类型
   int len;          // 该列的长度
+  ColDef() = default;
+  ColDef(std::string str, TypeId id, size_t len) {
+    this->type = id;
+    this->name = std::move(str);
+    this->len = len;
+  }
+  ColDef(Column col) {
+    this->name = col.get_name();
+    this->type = col.get_type();
+    this->len = col.get_len();
+  }
 };
 // 考虑到现有框架对于修改元数据并不友好，在此进行一些修改
 /* 系统管理器，负责元数据管理和DDL语句的执行 */
-class SmManager {
+class SmManager : std::enable_shared_from_this<SmManager> {
 public:
   DbMeta db_; // 当前打开的数据库的元数据
   std::unordered_map<std::string, std::unique_ptr<RmFileHandle>>
