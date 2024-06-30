@@ -14,7 +14,6 @@
 #include "binder/bound_statement.h"
 #include "binder/expressions/bound_column_ref.h"
 #include "binder/table_ref/bound_base_table_ref.h"
-#include "catalog/column.h"
 
 class IndexStatement : public BoundStatement {
 public:

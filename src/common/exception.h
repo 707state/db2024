@@ -15,12 +15,8 @@
 #include <cstdio>
 #include <cstdlib>
 #include <iostream>
-#include <memory>
 #include <stdexcept>
 #include <string>
-
-#include "type/type.h"
-
 
 // TODO(WAN): the comment I added below is a lie, but you shouldn't need to poke
 // around here. Don't worry about it.
@@ -130,4 +126,3 @@ public:
   explicit ExecutionException(const std::string &msg)
       : Exception(ExceptionType::EXECUTION, msg) {}
 };
-

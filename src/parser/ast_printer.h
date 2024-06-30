@@ -62,9 +62,6 @@ private:
     std::cout << offset2string(offset);
     offset += 2;
     std::cout << "LIST\n";
-    for (auto &node : nodes) {
-      print_node(node, offset);
-    }
   }
 
   static void print_node(const std::shared_ptr<TreeNode> &node, int offset) {
@@ -120,7 +117,6 @@ private:
     } else if (auto x = std::dynamic_pointer_cast<SetClause>(node)) {
       std::cout << "SET_CLAUSE\n";
       print_val(x->col_name, offset);
-      print_node(x->val, offset);
     } else if (auto x = std::dynamic_pointer_cast<BinaryExpr>(node)) {
       std::cout << "BINARY_EXPR\n";
       print_node(x->lhs, offset);

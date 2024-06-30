@@ -3,7 +3,13 @@
 #include <cstddef>
 #include <map>
 #include <string>
-enum ColType { TYPE_INT, TYPE_FLOAT, TYPE_STRING, TYPE_TIMESTAMP };
+enum class ColType {
+  INVALID,
+  TYPE_INT,
+  TYPE_FLOAT,
+  TYPE_STRING,
+  TYPE_TIMESTAMP
+};
 
 enum class TypeId {
   INVALID = 0,
@@ -32,6 +38,9 @@ static ColType typeid_to_coltype(TypeId id) {
   }
   case TypeId::TIMESTAMP: {
     return ColType::TYPE_TIMESTAMP;
+  }
+  default: {
+    return ColType::INVALID;
   }
   }
 }
@@ -75,8 +84,9 @@ inline size_t coltype2len(ColType type, size_t len = 4) {
 }
 
 inline std::string coltype2str(ColType type) {
-  std::map<ColType, std::string> m = {
-      {TYPE_INT, "INT"}, {TYPE_FLOAT, "FLOAT"}, {TYPE_STRING, "STRING"}};
+  std::map<ColType, std::string> m = {{ColType::TYPE_INT, "INT"},
+                                      {ColType::TYPE_FLOAT, "FLOAT"},
+                                      {ColType::TYPE_STRING, "STRING"}};
   return m.at(type);
 }
 inline std::string typeid2str(TypeId id) {

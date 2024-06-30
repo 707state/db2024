@@ -5,7 +5,6 @@
 #include "fmt/core.h"
 #include "system/col_meta.h"
 #include "system/column.h"
-#include "system/sm_meta.h"
 #include <cstddef>
 #include <memory>
 #include <optional>

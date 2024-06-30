@@ -21,6 +21,7 @@ See the Mulan PSL v2 for more details. */
 #include "common/context.h"
 #include "execution/execution_manager.h"
 #include "plan.h"
+#include "type/type_id.h"
 
 class Planner {
 private:
@@ -62,9 +63,10 @@ private:
                       std::vector<std::string> &index_col_names);
 
   ColType interp_sv_type(ast::SvType sv_type) {
-    std::map<ast::SvType, ColType> m = {{ast::SV_TYPE_INT, TYPE_INT},
-                                        {ast::SV_TYPE_FLOAT, TYPE_FLOAT},
-                                        {ast::SV_TYPE_STRING, TYPE_STRING}};
+    std::map<ast::SvType, ColType> m = {
+        {ast::SV_TYPE_INT, ColType::TYPE_INT},
+        {ast::SV_TYPE_FLOAT, ColType::TYPE_FLOAT},
+        {ast::SV_TYPE_STRING, ColType::TYPE_STRING}};
     return m.at(sv_type);
   }
 };

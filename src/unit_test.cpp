@@ -11,9 +11,15 @@ See the Mulan PSL v2 for more details. */
 #undef NDEBUG
 
 #define private public
+#include "record/rm_manager.h"
 
+#include "defs.h"
 #include "record/rm.h"
+#include "record/rm_file_handle.h"
+#include "record/rm_scan.h"
+#include "replacer/lru_replacer.h"
 #include "storage/buffer_pool_manager.h"
+#include "storage/disk_manager.h"
 
 #undef private
 
@@ -32,8 +38,6 @@ See the Mulan PSL v2 for more details. */
 #include <unordered_map>
 #include <vector>
 
-#include "replacer/lru_replacer.h"
-#include "storage/disk_manager.h"
 #include "gtest/gtest.h"
 
 const std::string TEST_DB_NAME =

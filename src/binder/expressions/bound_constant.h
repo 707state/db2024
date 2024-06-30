@@ -4,7 +4,7 @@
 #include <utility>
 
 #include "binder/bound_expression.h"
-#include "type/value.h"
+#include "common/common.h"
 
 class BoundExpression;
 
@@ -13,13 +13,13 @@ class BoundExpression;
  */
 class BoundConstant : public BoundExpression {
 public:
-  explicit BoundConstant(const Value &val)
-      : BoundExpression(ExpressionType::CONSTANT), val_(val) {}
+  explicit BoundConstant(sValue val)
+      : BoundExpression(ExpressionType::CONSTANT), val_(std::move(val)) {}
 
   auto ToString() const -> std::string override { return val_.ToString(); }
 
   auto HasAggregation() const -> bool override { return false; }
 
   /** The constant being bound. */
-  Value val_;
+  sValue val_;
 };

@@ -10,6 +10,7 @@ See the Mulan PSL v2 for more details. */
 #pragma once
 
 #include "common/common.h"
+#include "type/type_id.h"
 #include <memory>
 #include <string>
 #include <vector>
@@ -118,7 +119,7 @@ struct StringLit : public eValue {
   explicit StringLit(std::string val_) : val(std::move(val_)) {}
 };
 
-struct BoolLit : public sValue {
+struct BoolLit : public eValue {
   bool val;
 
   explicit BoolLit(bool val_) : val(val_) {}
@@ -134,9 +135,10 @@ struct Col : public Expr {
 
 struct SetClause : public TreeNode {
   std::string col_name;
-  std::shared_ptr<Value> val;
+  std::shared_ptr<sValue> val;
 
-  SetClause(std::string col_name_, std::shared_ptr<Value> val_)
+  SetClause(std::string col_name_, std::shared_ptr<sValue> val_)
+
       : col_name(std::move(col_name_)), val(std::move(val_)) {}
 };
 
@@ -246,8 +248,8 @@ struct SemValue {
 
   std::shared_ptr<Expr> sv_expr;
 
-  std::shared_ptr<Value> sv_val;
-  std::vector<std::shared_ptr<Value>> sv_vals;
+  std::shared_ptr<sValue> sv_val;
+  std::vector<std::shared_ptr<sValue>> sv_vals;
 
   std::shared_ptr<Col> sv_col;
   std::vector<std::shared_ptr<Col>> sv_cols;

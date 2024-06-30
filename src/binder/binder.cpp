@@ -7,7 +7,7 @@
 #include "fmt/format.h"
 #include "postgres_parser.hpp"
 
-Binder::Binder(const Catalog &catalog) : catalog_(catalog) {}
+Binder::Binder() {}
 
 void Binder::ParseAndSave(const std::string &query) {
   parser_.Parse(query);

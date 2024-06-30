@@ -1,31 +1,15 @@
 
 #include "binder/binder.h"
-#include "binder/bound_expression.h"
-#include "binder/bound_statement.h"
-#include "binder/expressions/bound_agg_call.h"
-#include "binder/expressions/bound_binary_op.h"
 #include "binder/expressions/bound_column_ref.h"
 #include "binder/expressions/bound_constant.h"
-#include "binder/expressions/bound_star.h"
-#include "binder/expressions/bound_unary_op.h"
 #include "binder/statement/create_statement.h"
 #include "binder/statement/index_statement.h"
-#include "binder/statement/select_statement.h"
-#include "binder/table_ref/bound_base_table_ref.h"
-#include "binder/table_ref/bound_cross_product_ref.h"
-#include "binder/table_ref/bound_join_ref.h"
 #include "binder/tokens.h"
-#include "catalog/catalog.h"
 #include "common/exception.h"
-#include "common/util/string_util.h"
 #include "fmt/format.h"
-#include "fmt/ranges.h"
 #include "nodes/nodes.hpp"
 #include "nodes/primnodes.hpp"
-#include "pg_definitions.hpp"
-#include "postgres_parser.hpp"
 #include "type/type_id.h"
-#include <iterator>
 #include <memory>
 #include <string>
 
@@ -50,7 +34,7 @@ auto Binder::BindColumnDefinition(duckdb_libpgquery::PGColumnDef *cdef)
   if (name == "varchar" || name == "char") {
     auto exprs = BindExpressionList(cdef->typeName->typmods);
     if (exprs.size() != 1) {
-      throw rmdb::Exception("should specify max length for varchar field");
+      throw Exception("should specify max length for varchar field");
     }
     const auto &varchar_max_length_val =
         dynamic_cast<const BoundConstant &>(*exprs[0]);
@@ -92,7 +76,7 @@ auto Binder::BindCreate(duckdb_libpgquery::PGCreateStmt *pg_stmt)
   }
 
   if (column_count == 0) {
-    throw rmdb::Exception("should have at least 1 column");
+    throw Exception("should have at least 1 column");
   }
 
   return std::make_unique<CreateStatement>(std::move(table),

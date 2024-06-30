@@ -2,11 +2,14 @@
 
 #include "common/context.h"
 #include "common/err_message.h"
+#include "common/exception.h"
 #include "index/ix.h"
 #include "record/rm_file_handle.h"
 #include "sm_defs.h"
 #include "sm_meta.h"
+#include <memory>
 #include <optional>
+#include <unordered_map>
 class Context;
 
 struct ColDef {
@@ -36,6 +39,27 @@ public:
         rm_manager_(rm_manager), ix_manager_(ix_manager) {}
 
   ~SmManager() {}
+  auto get_tab_handler(const std::string &tab_name)
+      -> const std::unique_ptr<RmFileHandle> & {
+    if (fhs_.count(tab_name) != 0) {
+      return fhs_[tab_name];
+    }
+    return nullptr;
+  }
+  auto get_tab_meta(const std::string &tab_name) -> std::optional<TabMeta> {
+    try {
+      return db_.get_table(tab_name);
+    } catch (const std::exception &e) {
+      return std::nullopt;
+    }
+  }
+  auto get_tab_meta(const std::string &tab_name) const -> const TabMeta & {
+    try {
+      return db_.get_table(tab_name);
+    } catch (const std::exception &e) {
+      throw Exception("Can not be null");
+    }
+  }
 
   BufferPoolManager *get_bpm() { return buffer_pool_manager_; }
 

@@ -19,4 +19,4 @@ target_link_libraries(buffer_pool_manager_test gtest_main storage record)
 
 
 add_executable(binder_test binder_test.cpp)
-target_link_libraries(binder_test duckdb_pg_query fmt )
+target_link_libraries(binder_test duckdb_pg_query fmt gtest_main storage record binder lru_replacer system statement common)

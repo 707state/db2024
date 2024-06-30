@@ -1,7 +1,6 @@
 #include "binder/binder.h"
 #include "binder/bound_expression.h"
 #include "binder/bound_order_by.h"
-#include "binder/bound_statement.h"
 #include "binder/bound_table_ref.h"
 #include "binder/expressions/bound_agg_call.h"
 #include "binder/expressions/bound_alias.h"
@@ -28,11 +27,8 @@
 #include "nodes/nodes.hpp"
 #include "nodes/parsenodes.hpp"
 #include "nodes/primnodes.hpp"
-#include "pg_definitions.hpp"
-#include "postgres_parser.hpp"
 #include "system/column.h"
 #include "type/type_id.h"
-#include "type/value_factory.h"
 #include <algorithm>
 #include <iterator>
 #include <memory>
@@ -331,13 +327,13 @@ auto Binder::BindJoin(duckdb_libpgquery::PGJoinExpr *root)
 auto Binder::BindBaseTableRef(std::string table_name,
                               std::optional<std::string> alias)
     -> std::unique_ptr<BoundBaseTableRef> {
-  auto table_info = catalog_.GetTable(table_name);
-  if (table_info == nullptr) {
+  const auto &table_info = sm_manager_->get_tab_meta(table_name);
+  if (table_info == std::nullopt) {
     throw Exception(fmt::format("invalid table {}", table_name));
   }
-  return std::make_unique<BoundBaseTableRef>(std::move(table_name),
-                                             table_info->oid_, std::move(alias),
-                                             table_info->schema_);
+  return std::make_unique<BoundBaseTableRef>(
+      std::move(table_name), table_info.value(), std::move(alias),
+      table_info->get_schema());
 }
 
 auto Binder::BindRangeVar(duckdb_libpgquery::PGRangeVar *table_ref)
@@ -392,9 +388,9 @@ auto Binder::GetAllColumns(const BoundTableRef &scope)
     auto bound_table_name = base_table_ref.GetBoundTableName();
     const auto &schema = base_table_ref.schema_;
     auto columns = std::vector<std::unique_ptr<BoundExpression>>{};
-    for (const auto &column : schema.GetColumns()) {
+    for (const auto &column : schema.get_columns()) {
       columns.push_back(std::make_unique<BoundColumnRef>(
-          std::vector{bound_table_name, column.GetName()}));
+          std::vector{bound_table_name, column.get_name()}));
     }
     return columns;
   }
@@ -503,18 +499,18 @@ auto Binder::BindConstant(duckdb_libpgquery::PGAConst *node)
   const auto &val = node->val;
   switch (val.type) {
   case duckdb_libpgquery::T_PGInteger: {
-    rmdb_ENSURE(val.val.ival <= rmdb_INT32_MAX, "value out of range");
+    rmdb_ENSURE(val.val.ival <= INT32_MAX, "value out of range");
     return std::make_unique<BoundConstant>(
-        ValueFactory::GetIntegerValue(static_cast<int32_t>(val.val.ival)));
+        sValue{ColType::TYPE_INT, static_cast<int32_t>(val.val.ival)});
   }
   case duckdb_libpgquery::T_PGString: {
     return std::make_unique<BoundConstant>(
-        ValueFactory::GetVarcharValue(val.val.str));
+        sValue{ColType::TYPE_STRING, val.val.str});
   }
   case duckdb_libpgquery::T_PGNull: {
     // TODO(chi): cast integer null to other types
     return std::make_unique<BoundConstant>(
-        ValueFactory::GetNullValueByType(TypeId::INTEGER));
+        sValue(ColType::TYPE_INT, static_cast<int32_t>(val.val.ival)));
   }
   default:
     break;

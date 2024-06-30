@@ -19,17 +19,17 @@ static const bool binary_search = false;
 
 inline int ix_compare(const char *a, const char *b, ColType type, int col_len) {
   switch (type) {
-  case TYPE_INT: {
+  case ColType::TYPE_INT: {
     int ia = *(int *)a;
     int ib = *(int *)b;
     return (ia < ib) ? -1 : ((ia > ib) ? 1 : 0);
   }
-  case TYPE_FLOAT: {
+  case ColType::TYPE_FLOAT: {
     float fa = *(float *)a;
     float fb = *(float *)b;
     return (fa < fb) ? -1 : ((fa > fb) ? 1 : 0);
   }
-  case TYPE_STRING:
+  case ColType::TYPE_STRING:
     return memcmp(a, b, col_len);
   default:
     throw InternalError("Unexpected data type");

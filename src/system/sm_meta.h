@@ -12,6 +12,7 @@ See the Mulan PSL v2 for more details. */
 
 #include "errors.h"
 #include "sm_defs.h"
+#include "system/schema.h"
 #include <algorithm>
 #include <iostream>
 #include <map>
@@ -46,25 +47,26 @@ struct IndexMeta {
 
 /* 表元数据 */
 struct TabMeta {
-  std::string name;               // 表名称
-  std::vector<ColMeta> cols;      // 表包含的字段
+  std::string name; // 表名称
+  Schema key_schema;
+  auto cols() const { return key_schema.schema_cols_; }
   std::vector<IndexMeta> indexes; // 表上建立的索引
-
   TabMeta() = default;
 
   TabMeta(const TabMeta &other) {
     name = other.name;
-    for (auto col : other.cols) {
-      cols.push_back(col);
+    for (auto col : other.cols()) {
+      key_schema.schema_cols_.push_back(col);
     }
   }
+  Schema get_schema() const { return key_schema; }
 
   /* 判断当前表中是否存在名为col_name的字段 */
   bool is_col(const std::string &col_name) const {
-    auto pos = std::find_if(cols.begin(), cols.end(), [&](const ColMeta &col) {
-      return col.name == col_name;
-    });
-    return pos != cols.end();
+    auto pos =
+        std::find_if(cols().begin(), cols().end(),
+                     [&](const ColMeta &col) { return col.name == col_name; });
+    return pos != cols().end();
   }
 
   /* 判断当前表上是否建有指定索引，索引包含的字段为col_names */
@@ -109,18 +111,18 @@ struct TabMeta {
 
   /* 根据字段名称获取字段元数据 */
   std::vector<ColMeta>::iterator get_col(const std::string &col_name) {
-    auto pos = std::find_if(cols.begin(), cols.end(), [&](const ColMeta &col) {
-      return col.name == col_name;
-    });
-    if (pos == cols.end()) {
+    auto pos =
+        std::find_if(cols().begin(), cols().end(),
+                     [&](const ColMeta &col) { return col.name == col_name; });
+    if (pos == cols().end()) {
       throw ColumnNotFoundError(col_name);
     }
     return pos;
   }
 
   friend std::ostream &operator<<(std::ostream &os, const TabMeta &tab) {
-    os << tab.name << '\n' << tab.cols.size() << '\n';
-    for (auto &col : tab.cols) {
+    os << tab.name << '\n' << tab.cols().size() << '\n';
+    for (auto &col : tab.cols()) {
       os << col << '\n'; // col是ColMeta类型，然后调用重载的ColMeta的操作符<<
     }
     os << tab.indexes.size() << "\n";
@@ -136,7 +138,7 @@ struct TabMeta {
     for (size_t i = 0; i < n; i++) {
       ColMeta col;
       is >> col;
-      tab.cols.push_back(col);
+      tab.cols().push_back(col);
     }
     is >> n;
     for (size_t i = 0; i < n; ++i) {
@@ -171,7 +173,16 @@ public:
   }
 
   /* 获取指定名称表的元数据 */
-  TabMeta &get_table(const std::string &tab_name) {
+  TabMeta get_table(const std::string &tab_name) {
+    auto pos = tabs_.find(tab_name);
+    if (pos == tabs_.end()) {
+
+      throw TableNotFoundError(tab_name);
+    }
+
+    return pos->second;
+  }
+  const TabMeta &get_table(const std::string &tab_name) const {
     auto pos = tabs_.find(tab_name);
     if (pos == tabs_.end()) {
 

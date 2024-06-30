@@ -3,20 +3,28 @@
 
 #include <memory>
 #include <optional>
+#include <utility>
 #include <vector>
 
 #include <string>
 
+#include "binder/expressions/bound_column_ref.h"
 #include "binder/simplified_token.h"
+#include "binder/statement/explain_statement.h"
+#include "binder/statement/index_statement.h"
 #include "binder/statement/select_statement.h"
 #include "binder/statement/set_show_statement.h"
+#include "binder/table_ref/bound_base_table_ref.h"
+#include "binder/table_ref/bound_expression_list_ref.h"
+#include "binder/table_ref/bound_subquery_ref.h"
 #include "binder/tokens.h"
 #include "common/macros.h"
 #include "nodes/parsenodes.hpp"
 #include "nodes/pg_list.hpp"
 #include "postgres_parser.hpp"
 #include "system/column.h"
-
+#include "system/sm_manager.h"
+namespace duckdb_libpgquery {
 struct PGList;
 struct PGSelectStmt;
 struct PGAConst;
@@ -41,15 +49,17 @@ class ExplainStatement;
 class IndexStatement;
 class DeleteStatement;
 class UpdateStatement;
-
+} // namespace duckdb_libpgquery
 /**
  * The binder is responsible for transforming the Postgres parse tree to a
  * binder tree which can be recognized unambiguously by the rmdb planner.
  */
 class Binder {
 public:
-  explicit Binder(const Catalog &catalog);
-
+  explicit Binder();
+  Binder(std::unique_ptr<SmManager> manager)
+      : sm_manager_(std::move(manager)) {}
+  Binder(SmManager *manager) { sm_manager_.reset(manager); }
   /** Attempts to parse a query into a series of SQL statements. The parsed
    * statements will be stored in the `statements_nodes_` variable.
    */
@@ -251,8 +261,7 @@ private:
   /** Catalog will be used during the binding process. USERS SHOULD ENSURE IT
    * OUTLIVES THE BINDER, otherwise it's a dangling reference.
    */
-  const Catalog &catalog_;
-
+  std::unique_ptr<SmManager> sm_manager_;
   /** The current scope for resolving column ref, used in binding expressions */
   const BoundTableRef *scope_{nullptr};
 

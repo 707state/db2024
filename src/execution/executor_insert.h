@@ -27,7 +27,7 @@ public:
     tab_ = sm_manager_->db_.get_table(tab_name);
     values_ = values;
     tab_name_ = tab_name;
-    if (values.size() != tab_.cols.size()) {
+    if (values.size() != tab_.cols().size()) {
       throw InvalidValueCountError();
     }
     fh_ = sm_manager_->fhs_.at(tab_name).get();

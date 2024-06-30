@@ -19,8 +19,6 @@ See the Mulan PSL v2 for more details. */
 #include <unistd.h>
 
 #include <fstream>
-#include <utility>
-#include <vector>
 
 #include "common/config.h"
 #include "common/context.h"
@@ -322,7 +320,7 @@ void SmManager::show_tables(Context *context) {
  * @param {Context*} context
  */
 void SmManager::desc_table(const std::string &tab_name, Context *context) {
-  TabMeta &tab = db_.get_table(tab_name);
+  const TabMeta &tab = db_.get_table(tab_name);
 
   std::vector<std::string> captions = {"Field", "Type", "Index"};
   RecordPrinter printer(captions.size());
@@ -331,7 +329,7 @@ void SmManager::desc_table(const std::string &tab_name, Context *context) {
   printer.print_record(captions, context);
   printer.print_separator(context);
   // Print fields
-  for (auto &col : tab.cols) {
+  for (auto &col : tab.cols()) {
     std::vector<std::string> field_info = {
         col.name, coltype2str(typeid_to_coltype(col.type)),
         col.index ? "YES" : "NO"};
@@ -361,7 +359,7 @@ void SmManager::create_table(const std::string &tab_name,
     ColMeta col{tab_name,    col_def.name, coltype_to_typeid(col_def.type),
                 col_def.len, curr_offset,  false};
     curr_offset += col_def.len;
-    tab.cols.push_back(col);
+    tab.cols().push_back(col);
   }
   // Create & open record file
   int record_size =
@@ -395,7 +393,7 @@ RC_VALUES SmManager::create_table_rc(const std::string &tab_name,
     ColMeta col = {tab_name,    col_def.name, coltype_to_typeid(col_def.type),
                    col_def.len, curr_offset,  false};
     curr_offset += col_def.len;
-    tab.cols.push_back(col);
+    tab.cols().push_back(col);
   }
   // Create & open record file
   int record_size =
@@ -427,13 +425,13 @@ SmManager::add_table_cols(const std::string &tab_name,
       throw TableNotFoundError(tab_name);
     }
     // 获取所有cols的总长度
-    int curr_offset = db_.tabs_[tab_name].cols.back().offset;
+    int curr_offset = db_.tabs_[tab_name].cols().back().offset;
     auto &tab = db_.tabs_[tab_name];
     for (auto &col_def : col_defs) {
       ColMeta col{tab_name,    col_def.name, coltype_to_typeid(col_def.type),
                   col_def.len, curr_offset,  false};
       curr_offset += col_def.len;
-      tab.cols.emplace_back(col);
+      tab.cols().emplace_back(col);
     }
     return std::make_optional(1);
   } catch (std::exception &e) {

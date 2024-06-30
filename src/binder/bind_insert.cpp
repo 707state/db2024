@@ -1,25 +1,20 @@
-#include <iterator>
 #include <memory>
 #include <optional>
 #include <string>
 
 #include "binder/binder.h"
 #include "binder/bound_expression.h"
-#include "binder/bound_order_by.h"
-#include "binder/bound_table_ref.h"
 #include "binder/expressions/bound_column_ref.h"
 #include "binder/expressions/bound_constant.h"
 #include "binder/statement/delete_statement.h"
 #include "binder/statement/insert_statement.h"
-#include "binder/statement/select_statement.h"
 #include "binder/statement/update_statement.h"
 #include "binder/tokens.h"
 #include "common/exception.h"
 
 #include "common/util/string_util.h"
 #include "nodes/parsenodes.hpp"
-
-#include "type/value_factory.h"
+#include "type/type_id.h"
 
 auto Binder::BindInsert(duckdb_libpgquery::PGInsertStmt *pg_stmt)
     -> std::unique_ptr<InsertStatement> {
@@ -50,7 +45,7 @@ auto Binder::BindDelete(duckdb_libpgquery::PGDeleteStmt *stmt)
   if (stmt->whereClause != nullptr) {
     expr = BindExpression(stmt->whereClause);
   } else {
-    expr = std::make_unique<BoundConstant>(ValueFactory::GetBooleanValue(true));
+    expr = std::make_unique<BoundConstant>(sValue{ColType::TYPE_INT, 0});
   }
 
   return std::make_unique<DeleteStatement>(std::move(table), std::move(expr));
@@ -75,8 +70,7 @@ auto Binder::BindUpdate(duckdb_libpgquery::PGUpdateStmt *stmt)
   if (stmt->whereClause != nullptr) {
     filter_expr = BindExpression(stmt->whereClause);
   } else {
-    filter_expr =
-        std::make_unique<BoundConstant>(ValueFactory::GetBooleanValue(true));
+    filter_expr = std::make_unique<BoundConstant>(sValue{ColType::TYPE_INT, 0});
   }
 
   auto root = stmt->targetList;

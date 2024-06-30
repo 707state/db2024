@@ -39,7 +39,7 @@ public:
                     std::vector<Condition> conds,
                     std::vector<std::string> index_col_names, Context *context)
       : tab_name_(std::move(tab_name)), conds_(std::move(conds)),
-        cols_(tab_.cols), len_(cols_.back().offset + cols_.back().len),
+        cols_(tab_.cols()), len_(cols_.back().offset + cols_.back().len),
         fed_conds_(conds_), index_col_names_(index_col_names),
         sm_manager_(sm_manager) {
 

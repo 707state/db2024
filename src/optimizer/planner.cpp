@@ -12,16 +12,6 @@ See the Mulan PSL v2 for more details. */
 
 #include <memory>
 
-#include "execution/executor_delete.h"
-#include "execution/executor_index_scan.h"
-#include "execution/executor_insert.h"
-#include "execution/executor_nestedloop_join.h"
-#include "execution/executor_projection.h"
-#include "execution/executor_seq_scan.h"
-#include "execution/executor_update.h"
-#include "index/ix.h"
-#include "record_printer.h"
-
 // 目前的索引匹配规则为：完全匹配索引字段，且全部为单点查询，不会自动调整where条件的顺序
 bool Planner::get_index_cols(std::string tab_name,
                              std::vector<Condition> curr_conds,
@@ -33,7 +23,7 @@ bool Planner::get_index_cols(std::string tab_name,
       index_col_names.push_back(cond.lhs_col.col_name);
     }
   }
-  TabMeta &tab = sm_manager_->db_.get_table(tab_name);
+  const TabMeta &tab = sm_manager_->db_.get_table(tab_name);
   if (tab.is_index(index_col_names)) {
     return true;
   }
@@ -282,7 +272,7 @@ std::shared_ptr<Plan> Planner::generate_sort_plan(std::shared_ptr<Query> query,
   std::vector<ColMeta> all_cols;
   for (auto &sel_tab_name : tables) {
     // 这里db_不能写成get_db(), 注意要传指针
-    const auto &sel_tab_cols = sm_manager_->db_.get_table(sel_tab_name).cols;
+    const auto &sel_tab_cols = sm_manager_->db_.get_table(sel_tab_name).cols();
     all_cols.insert(all_cols.end(), sel_tab_cols.begin(), sel_tab_cols.end());
   }
   TabCol sel_col;
@@ -376,7 +366,7 @@ std::shared_ptr<Plan> Planner::do_planner(std::shared_ptr<Query> query,
     }
 
     plannerRoot = std::make_shared<DMLPlan>(
-        T_Delete, table_scan_executors, x->tab_name, std::vector<Value>(),
+        T_Delete, table_scan_executors, x->tab_name, std::vector<sValue>(),
         query->conds, std::vector<SetClause>());
   } else if (auto x =
                  std::dynamic_pointer_cast<ast::UpdateStmt>(query->parse)) {
@@ -398,7 +388,7 @@ std::shared_ptr<Plan> Planner::do_planner(std::shared_ptr<Query> query,
           T_IndexScan, sm_manager_, x->tab_name, query->conds, index_col_names);
     }
     plannerRoot = std::make_shared<DMLPlan>(T_Update, table_scan_executors,
-                                            x->tab_name, std::vector<Value>(),
+                                            x->tab_name, std::vector<sValue>(),
                                             query->conds, query->set_clauses);
   } else if (auto x =
                  std::dynamic_pointer_cast<ast::SelectStmt>(query->parse)) {
@@ -408,7 +398,7 @@ std::shared_ptr<Plan> Planner::do_planner(std::shared_ptr<Query> query,
     std::shared_ptr<Plan> projection =
         generate_select_plan(std::move(query), context);
     plannerRoot = std::make_shared<DMLPlan>(
-        T_select, projection, std::string(), std::vector<Value>(),
+        T_select, projection, std::string(), std::vector<sValue>(),
         std::vector<Condition>(), std::vector<SetClause>());
   } else {
     throw InternalError("Unexpected AST root");

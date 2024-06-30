@@ -33,9 +33,9 @@ public:
         len_(cols_.back().offset + cols_.back().len), fed_conds_(conds_),
         sm_manager_(sm_manager) {
 
-    TabMeta &tab = sm_manager_->db_.get_table(tab_name_);
+    const TabMeta &tab = sm_manager_->db_.get_table(tab_name_);
     fh_ = sm_manager_->fhs_.at(tab_name_).get();
-    cols_ = tab.cols;
+    cols_ = tab.cols();
 
     context_ = context;
   }

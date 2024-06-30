@@ -65,8 +65,8 @@ public:
         index_col_names_(std::move(index_col_names)) {
     Plan::tag = tag;
 
-    TabMeta &tab = sm_manager->db_.get_table(tab_name_);
-    cols_ = tab.cols;
+    const TabMeta &tab = sm_manager->db_.get_table(tab_name_);
+    cols_ = tab.cols();
   }
   ~ScanPlan() override = default;
   // 以下变量同ScanExecutor中的变量
@@ -127,7 +127,7 @@ public:
 class DMLPlan : public Plan {
 public:
   DMLPlan(PlanTag tag, std::shared_ptr<Plan> subplan, std::string tab_name,
-          std::vector<Value> values, std::vector<Condition> conds,
+          std::vector<sValue> values, std::vector<Condition> conds,
           std::vector<SetClause> set_clauses)
       : subplan_(std::move(subplan)), tab_name_(std::move(tab_name)),
         values_(std::move(values)), conds_(std::move(conds)),
@@ -137,7 +137,7 @@ public:
   ~DMLPlan() override = default;
   std::shared_ptr<Plan> subplan_;
   std::string tab_name_;
-  std::vector<Value> values_;
+  std::vector<sValue> values_;
   std::vector<Condition> conds_;
   std::vector<SetClause> set_clauses_;
 };

@@ -6,7 +6,7 @@ std::unique_ptr<RmRecord> InsertExecutor::Next() {
   // Make record buffer
   RmRecord rec(fh_->get_file_hdr().record_size);
   for (size_t i = 0; i < values_.size(); i++) {
-    auto &col = tab_.cols[i];
+    auto &col = tab_.cols()[i];
     auto &val = values_[i];
     if (col.type != coltype_to_typeid(val.type)) {
       throw IncompatibleTypeError(typeid2str(col.type), coltype2str(val.type));
