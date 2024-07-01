@@ -48,8 +48,7 @@ public:
       : std::runtime_error(message), type_(ExceptionType::INVALID) {
 #ifndef NDEBUG
     std::string exception_message = "Message :: " + message + "\n";
-    std::cerr << fmt::format("File: {}, line: {}\n\t {}", __FILE__, __LINE__,
-                             exception_message);
+    std::cerr << fmt::format("{}", exception_message);
 
 #endif
   }
@@ -65,8 +64,7 @@ public:
     std::string exception_message =
         "\nException Type :: " + ExceptionTypeToString(type_) +
         "\nMessage :: " + message + "\n";
-    std::cerr << fmt::format("File: {}, line: {}\n\t {}", __FILE__, __LINE__,
-                             exception_message);
+    std::cerr << fmt::format("{}", exception_message);
 #endif
   }
 

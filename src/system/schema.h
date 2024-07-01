@@ -68,7 +68,7 @@ public:
                   static_cast<size_t>(col_meta.len),
                   static_cast<size_t>(col_meta.offset)};
   }
-  [[nodiscard]] auto get_columns() const -> const std::vector<Column> & {
+  [[nodiscard]] auto get_columns() const -> std::vector<Column> {
     std::vector<Column> cols;
     for (auto &c : schema_cols_) {
       cols.push_back(Column{c.name, c.type, static_cast<size_t>(c.len),

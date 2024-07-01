@@ -3,6 +3,7 @@
 #include "common/context.h"
 #include "common/err_message.h"
 #include "common/exception.h"
+#include "format.h"
 #include "index/ix_index_handle.h"
 #include "index/ix_manager.h"
 #include "record/rm_file_handle.h"
@@ -59,7 +60,7 @@ public:
     if (fhs_.count(tab_name) != 0) {
       return fhs_[tab_name];
     }
-    return nullptr;
+    throw Exception(fmt::format("No table named: {}", tab_name));
   }
   auto get_tab_meta(const std::string &tab_name) -> std::optional<TabMeta> {
     try {

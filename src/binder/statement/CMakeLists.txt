@@ -2,6 +2,7 @@ set(SOURCE
     create_statement.cpp
     delete_statement.cpp
     explain_statement.cpp
+    drop_statement.cpp
     index_statement.cpp
     insert_statement.cpp
     select_statement.cpp

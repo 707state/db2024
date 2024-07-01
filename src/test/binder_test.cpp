@@ -1,12 +1,13 @@
-#include "binder/binder.h"
-#include "binder/bound_statement.h"
-#include "system/column.h"
-#include "type/type_id.h"
+#include "common/exception.h"
 #include <exception>
-#include <type_traits>
+#include <iostream>
 #include <utility>
 #include <vector>
 #define private public
+#include "binder/binder.h"
+#include "binder/bound_statement.h"
+#include "type/type_id.h"
+
 #include "record/rm_manager.h"
 #include "system/sm_manager.h"
 #undef private
@@ -14,6 +15,8 @@
 #include <memory>
 
 #include <string>
+using fmt::format;
+
 constexpr int MAX_FILES = 32;
 constexpr int MAX_PAGES = 128;
 constexpr size_t TEST_BUFFER_POOL_SIZE = MAX_FILES * MAX_PAGES;
@@ -28,7 +31,7 @@ auto rm_manager =
 auto ix_manager =
     std::make_unique<IxManager>(disk_manager.get(), buffer_pool_manager.get());
 auto sm_manager =
-    std::make_shared<SmManager>(disk_manager.get(), buffer_pool_manager.get(),
+    std::make_unique<SmManager>(disk_manager.get(), buffer_pool_manager.get(),
                                 rm_manager.get(), ix_manager.get());
 std::unordered_map<int, char *> mock;
 auto binder = std::make_unique<Binder>(sm_manager.get());
@@ -53,18 +56,40 @@ TEST(BinderTest, BindSelectValue) {
   PrintStatements(statements);
 }
 TEST(BinderTest, BindCreateTable) {
-  auto statements = TryBind("create table x (name int)");
-  PrintStatements(statements);
+  try {
+    auto statements = TryBind("create table x (name int4)");
+    PrintStatements(statements);
+  } catch (const std::exception &e_) {
+    std::cout << format("Can not create table {}: Reason: {}", "x", e_.what());
+  }
 }
 TEST(BinderTest, NewTable) {
+
   std::vector<ColDef> cols;
   cols.push_back(ColDef{"name", TypeId::INTEGER, 4});
   cols.push_back(ColDef{"id", TypeId::INTEGER, 4});
   try {
-    sm_manager->create_table("x", cols, nullptr);
+    binder->sm_manager_->create_table("z", cols, nullptr);
   } catch (const std::exception &e) {
     std::cout << e.what();
   }
-  auto statements = TryBind("select * from x");
+  auto statements = TryBind("select * from z");
+  PrintStatements(statements);
+}
+TEST(BinderTest, InsertTable) {
+  try {
+
+    auto statementss = TryBind("insert into z values (1,1)");
+    PrintStatements(statementss);
+  } catch (const std::exception &e_) {
+    std::cout << format("Can not create table {}: Reason: {}", "x", e_.what());
+  }
+}
+TEST(BInderTest, DeleteTable) {
+  auto statements = TryBind("drop table z");
+  PrintStatements(statements);
+}
+TEST(BinderTest, IndexStatement) {
+  auto statements = TryBind("create index z(name);");
   PrintStatements(statements);
 }
