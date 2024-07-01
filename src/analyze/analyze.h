@@ -19,7 +19,7 @@ See the Mulan PSL v2 for more details. */
 #include "common/common.h"
 #include "parser/ast.h"
 #include "system/sm_manager.h"
-
+// NOTE: 这一部分需要大量修改
 class Query {
 public:
   std::shared_ptr<ast::TreeNode> parse;

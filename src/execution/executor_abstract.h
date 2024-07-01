@@ -11,9 +11,10 @@ See the Mulan PSL v2 for more details. */
 #pragma once
 
 #include "common/common.h"
-#include "execution_defs.h"
-#include "index/ix.h"
-#include "system/sm.h"
+#include "common/context.h"
+#include "defs.h"
+#include "system/col_meta.h"
+#include <algorithm>
 
 class AbstractExecutor {
 public:

@@ -52,7 +52,7 @@ void PrintStatements(
 }
 
 TEST(BinderTest, BindSelectValue) {
-  auto statements = TryBind("select 1");
+  auto statements = TryBind("select 1+2*3");
   PrintStatements(statements);
 }
 TEST(BinderTest, BindCreateTable) {

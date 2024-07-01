@@ -30,7 +30,9 @@ auto Binder::BindColumnDefinition(duckdb_libpgquery::PGColumnDef *cdef)
   if (name == "int4" || name == "int") {
     return {colname, TypeId::INTEGER};
   }
-
+  if (name == "float") {
+    return {colname, TypeId::DECIMAL};
+  }
   if (name == "varchar" || name == "char") {
     auto exprs = BindExpressionList(cdef->typeName->typmods);
     if (exprs.size() != 1) {

@@ -3,6 +3,7 @@ set(SOURCE
     bind_create.cpp
     bind_insert.cpp
     bind_select.cpp
+    bind_drop.cpp
     bind_variable.cpp
     bound_statement.cpp
     fmt_impl.cpp

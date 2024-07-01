@@ -23,7 +23,7 @@ See the Mulan PSL v2 for more details. */
 #include "transaction/transaction_manager.h"
 
 class Planner;
-
+// 执行qml语句
 class QlManager {
 private:
   SmManager *sm_manager_;

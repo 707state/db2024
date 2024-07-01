@@ -10,6 +10,9 @@ See the Mulan PSL v2 for more details. */
 
 #pragma once
 #include "executor_abstract.h"
+#include "record/rm_file_handle.h"
+#include "system/sm_manager.h"
+#include "system/sm_meta.h"
 
 class InsertExecutor : public AbstractExecutor {
 private:

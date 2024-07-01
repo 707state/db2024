@@ -10,6 +10,7 @@
 
 #include "binder/expressions/bound_column_ref.h"
 #include "binder/simplified_token.h"
+#include "binder/statement/drop_statement.h"
 #include "binder/statement/explain_statement.h"
 #include "binder/statement/index_statement.h"
 #include "binder/statement/select_statement.h"
@@ -94,7 +95,8 @@ public:
 
   auto BindCreate(duckdb_libpgquery::PGCreateStmt *pg_stmt)
       -> std::unique_ptr<CreateStatement>;
-
+  auto BindDrop(duckdb_libpgquery::PGDropStmt *pg_stmt)
+      -> std::unique_ptr<DropStatement>;
   auto BindColumnDefinition(duckdb_libpgquery::PGColumnDef *cdef) -> Column;
 
   auto BindSelect(duckdb_libpgquery::PGSelectStmt *pg_stmt)
