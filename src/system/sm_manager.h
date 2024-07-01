@@ -22,6 +22,14 @@ struct ColDef {
   TypeId type;      // 该列的类型
   int len;          // 该列的长度
   ColDef() = default;
+  ColDef(std::string str, TypeId id) {
+    if (TypeId::VARCHAR == id) {
+      throw Exception(fmt::format("Must declare length for char() type"));
+    }
+    this->type = id;
+    this->name = std::move(str);
+  }
+  // 只有string才有长度
   ColDef(std::string str, TypeId id, size_t len) {
     this->type = id;
     this->name = std::move(str);

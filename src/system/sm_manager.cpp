@@ -362,7 +362,7 @@ void SmManager::create_table(const std::string &tab_name,
     ColMeta col{tab_name,    col_def.name, col_def.type,
                 col_def.len, curr_offset,  false};
     curr_offset += col_def.len;
-    tab.cols().push_back(col);
+    tab.key_schema.schema_cols_.push_back(col);
   }
   // Create & open record file
   int record_size =
@@ -396,7 +396,7 @@ RC_VALUES SmManager::create_table_rc(const std::string &tab_name,
     ColMeta col = {tab_name,    col_def.name, col_def.type,
                    col_def.len, curr_offset,  false};
     curr_offset += col_def.len;
-    tab.cols().push_back(col);
+    tab.key_schema.schema_cols_.push_back(col);
   }
   // Create & open record file
   int record_size =
@@ -434,7 +434,7 @@ SmManager::add_table_cols(const std::string &tab_name,
       ColMeta col{tab_name,    col_def.name, col_def.type,
                   col_def.len, curr_offset,  false};
       curr_offset += col_def.len;
-      tab.cols().emplace_back(col);
+      tab.key_schema.schema_cols_.emplace_back(col);
     }
     return std::make_optional(1);
   } catch (std::exception &e) {

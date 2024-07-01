@@ -81,7 +81,7 @@ public:
   [[nodiscard]] auto get_colmetas() const -> const std::vector<ColMeta> & {
     return schema_cols_;
   }
-  auto get_column(const int col_idx) const -> const Column & {
+  auto get_column(const int col_idx) const -> Column {
     auto tmp = schema_cols_[col_idx];
     return Column{tmp.name, tmp.type, static_cast<size_t>(tmp.len),
                   static_cast<size_t>(tmp.offset)};
@@ -94,16 +94,17 @@ public:
   auto column_push_back(const ColMeta &col_meta) {
     this->schema_cols_.push_back(col_meta);
   }
-  auto get_col_idx(const std::string &col_name) {
+  auto get_col_idx(const std::string &col_name) -> std::optional<int> {
     if (auto res = try_get_col_idx(col_name)) {
-      return *res;
+      return res.value();
     }
     LOG_WARNING("Column: %s does not exist.\n", col_name.c_str());
+    return std::nullopt;
   }
   std::optional<int> try_get_col_idx(const std::string &col_name) {
     for (auto i = 0; i < schema_cols_.size(); i++) {
       if (schema_cols_[i].name == col_name) {
-        return std::optional{i};
+        return std::make_optional(i);
       }
     }
     return std::nullopt;

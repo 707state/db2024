@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 
 project(duckdb_pg_query CXX C)
 if(POLICY CMP0063)
-    cmake_policy(SET CMP0063 NEW)
+  cmake_policy(SET CMP0063 NEW)
 endif()
 set(CMAKE_CXX_VISIBILITY_PRESET hidden)
 
@@ -23,6 +23,6 @@ target_include_directories(
   PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>)
 set_target_properties(duckdb_pg_query PROPERTIES EXPORT_NAME duckdb_duckdb_pg_query)
 
-disable_target_warnings(duckdb_pg_query)
+# disable_target_warnings(duckdb_pg_query)
 
 set_target_properties(duckdb_pg_query PROPERTIES POSITION_INDEPENDENT_CODE ON)

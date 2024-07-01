@@ -269,17 +269,6 @@ auto Binder::BindFrom(duckdb_libpgquery::PGList *list)
       result = std::make_unique<BoundCrossProductRef>(std::move(result),
                                                       std::move(table));
     }
-
-    /**
-     * The result bound tree will be like:
-     * ```
-     *     O
-     *    / \
-     *   O   3
-     *  / \
-     * 1   2
-     * ```
-     */
     return result;
   }
 

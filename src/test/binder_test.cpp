@@ -66,19 +66,18 @@ TEST(BinderTest, BindCreateTable) {
 TEST(BinderTest, NewTable) {
 
   std::vector<ColDef> cols;
-  cols.push_back(ColDef{"name", TypeId::INTEGER, 4});
-  cols.push_back(ColDef{"id", TypeId::INTEGER, 4});
+  cols.push_back(ColDef{"name", TypeId::INTEGER});
+  cols.push_back(ColDef{"id", TypeId::INTEGER});
   try {
     binder->sm_manager_->create_table("z", cols, nullptr);
+    auto statements = TryBind("select * from z");
+    PrintStatements(statements);
   } catch (const std::exception &e) {
     std::cout << e.what();
   }
-  auto statements = TryBind("select * from z");
-  PrintStatements(statements);
 }
 TEST(BinderTest, InsertTable) {
   try {
-
     auto statementss = TryBind("insert into z values (1,1)");
     PrintStatements(statementss);
   } catch (const std::exception &e_) {
@@ -86,10 +85,11 @@ TEST(BinderTest, InsertTable) {
   }
 }
 TEST(BInderTest, DeleteTable) {
+
   auto statements = TryBind("drop table z");
   PrintStatements(statements);
 }
 TEST(BinderTest, IndexStatement) {
-  auto statements = TryBind("create index z(name);");
+  auto statements = TryBind("create index test_index on z(name);");
   PrintStatements(statements);
 }
