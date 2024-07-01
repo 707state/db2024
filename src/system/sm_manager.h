@@ -3,7 +3,7 @@
 #include "common/context.h"
 #include "common/err_message.h"
 #include "common/exception.h"
-#include "format.h"
+#include "fmt/format.h"
 #include "index/ix_index_handle.h"
 #include "index/ix_manager.h"
 #include "record/rm_file_handle.h"

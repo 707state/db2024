@@ -49,7 +49,8 @@ struct IndexMeta {
 struct TabMeta {
   std::string name; // 表名称
   Schema key_schema;
-  auto cols() const { return key_schema.schema_cols_; }
+  std::vector<ColMeta> &cols() { return key_schema.schema_cols_; }
+  const std::vector<ColMeta> &cols() const { return key_schema.schema_cols_; }
   std::vector<IndexMeta> indexes; // 表上建立的索引
   TabMeta() = default;
 

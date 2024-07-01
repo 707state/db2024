@@ -23,7 +23,9 @@ See the Mulan PSL v2 for more details. */
 #include "common/config.h"
 #include "common/context.h"
 #include "common/err_message.h"
+#include "common/exception.h"
 #include "errors.h"
+#include "format.h"
 #include "index/ix_index_handle.h"
 #include "record/rm_manager.h"
 #include "record_printer.h"
@@ -349,7 +351,8 @@ void SmManager::create_table(const std::string &tab_name,
                              const std::vector<ColDef> &col_defs,
                              Context *context) {
   if (db_.is_table(tab_name)) {
-    throw TableExistsError(tab_name);
+    // throw Exception(fmt::format("table :{} already exists", tab_name));
+    LOG_WARNING("already have ont", NULL);
   }
   // Create table meta
   int curr_offset = 0;

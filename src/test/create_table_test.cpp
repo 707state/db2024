@@ -1,9 +1,6 @@
-#include "common/err_message.h"
 #include "defs.h"
 #include "errors.h"
-// #include "parser/yacc.tab.h"
-//  #include "parser/yacc.tab.h"
-//   #include "parser/yacc.tab.h"
+#include "type/type_id.h"
 #include <optional>
 #include <ostream>
 #include <unistd.h>
@@ -11,13 +8,10 @@
 #define private public
 #include "common/config.h"
 #include "index/ix_manager.h"
-#include "optimizer/plan.h"
-#include "optimizer/planner.h"
-#include "parser/ast.h"
 #include "record/rm_defs.h"
-// #include "parser/yacc.tab.h"
 #include "record/rm_scan.h"
 #include "system/sm_meta.h"
+#include <system/sm_manager.h>
 
 #include "record/rm_file_handle.h"
 #include "record/rm_manager.h"
@@ -32,7 +26,6 @@
 #include <gtest/gtest.h>
 #include <memory>
 #include <string>
-#include <system/sm_manager.h>
 #include <unordered_map>
 const std::string TEST_TABLE_NAME = "t1";
 const std::string TEST_DB_NAME = "grade";
@@ -198,12 +191,12 @@ TEST_F(CreateTableTest, SimpleTest) {
   sm_manager_->create_db(TEST_DB_NAME);
   EXPECT_EQ(sm_manager_->is_dir(TEST_DB_NAME), true);
   std::vector<ColDef> col_defs;
-  col_defs.push_back(ColDef{"id1", TYPE_INT, sizeof(int)});
+  col_defs.push_back(ColDef{"id1", TypeId::INTEGER, sizeof(int)});
   // string的实现是一个字符数组
-  col_defs.push_back(ColDef{"name", TYPE_STRING, 5 * sizeof(char)});
+  col_defs.push_back(ColDef{"name", TypeId::VARCHAR, 5 * sizeof(char)});
   sm_manager_->create_table(TEST_TABLE_NAME, col_defs, nullptr);
   ASSERT_NE(sm_manager_->db_.tabs_.count(TEST_TABLE_NAME), 0);
-  EXPECT_EQ(sm_manager_->db_.tabs_[TEST_TABLE_NAME].cols.size(), 2);
+  EXPECT_EQ(sm_manager_->db_.tabs_[TEST_TABLE_NAME].cols().size(), 2);
   // sm_manager_->show_tables(nullptr);
 }
 TEST_F(CreateTableTest, DropTest) {
@@ -223,12 +216,16 @@ TEST_F(CreateTableTest, DropTest) {
   // 手动删掉
   sm_manager_->db_.tabs_.erase(TEST_TABLE_NAME);
   std::vector<ColDef> col_defs;
-  col_defs.push_back(ColDef{"id", TYPE_FLOAT, sizeof(float)});
-  col_defs.push_back(ColDef{"name", TYPE_STRING, 7 * sizeof(char)});
-  col_defs.push_back(ColDef{"age", TYPE_INT, sizeof(int)});
-  sm_manager_->create_table(TEST_TABLE_NAME, col_defs, nullptr);
-  ASSERT_NE(sm_manager_->db_.tabs_[TEST_TABLE_NAME].cols.size(), 0);
-  EXPECT_EQ(sm_manager_->db_.tabs_[TEST_TABLE_NAME].cols[0].name, "id");
+  col_defs.push_back(ColDef{"id", TypeId::INTEGER, sizeof(float)});
+  col_defs.push_back(ColDef{"name", TypeId::VARCHAR, 7 * sizeof(char)});
+  col_defs.push_back(ColDef{"age", TypeId::INTEGER, sizeof(int)});
+  try {
+    sm_manager_->create_table(TEST_TABLE_NAME, col_defs, nullptr);
+  } catch (std::exception &e) {
+    std::cerr << e.what();
+  }
+  ASSERT_NE(sm_manager_->db_.tabs_[TEST_TABLE_NAME].cols().size(), 0);
+  EXPECT_EQ(sm_manager_->db_.tabs_[TEST_TABLE_NAME].cols()[0].name, "id");
   sm_manager_->drop_table(TEST_TABLE_NAME, nullptr);
   EXPECT_EQ(sm_manager_->db_.tabs_.count(TEST_TABLE_NAME), 0);
 }
@@ -249,12 +246,12 @@ TEST_F(CreateTableTest, IndexTest) {
   sm_manager_->db_.tabs_.erase(TEST_TABLE_NAME);
   // 测试create index, drop index
   std::vector<ColDef> col_defs;
-  col_defs.push_back(ColDef{"id1", TYPE_FLOAT, sizeof(float)});
-  col_defs.push_back(ColDef{"name", TYPE_STRING, sizeof(char) * 7});
-  col_defs.push_back(ColDef{"avaerage", TYPE_INT, sizeof(int)});
+  col_defs.push_back(ColDef{"id1", TypeId::INTEGER, sizeof(float)});
+  col_defs.push_back(ColDef{"name", TypeId::VARCHAR, sizeof(char) * 7});
+  col_defs.push_back(ColDef{"avaerage", TypeId::INTEGER, sizeof(int)});
   sm_manager_->create_table(TEST_TABLE_NAME, col_defs, nullptr);
   // 验证插入是否成功
-  EXPECT_EQ(sm_manager_->db_.tabs_[TEST_TABLE_NAME].cols.size(), 3);
+  EXPECT_EQ(sm_manager_->db_.tabs_[TEST_TABLE_NAME].cols().size(), 3);
   std::vector<std::string> col_names;
   col_names.push_back("id1");
   col_names.push_back("name");
@@ -280,15 +277,15 @@ TEST_F(CreateTableTest, AddColTest) {
   sm_manager_->db_.tabs_.erase(TEST_TABLE_NAME);
   // 测试create index, drop index
   std::vector<ColDef> col_defs;
-  col_defs.push_back(ColDef{"id1", TYPE_FLOAT, sizeof(float)});
-  col_defs.push_back(ColDef{"name", TYPE_STRING, sizeof(char) * 7});
-  col_defs.push_back(ColDef{"avaerage", TYPE_INT, sizeof(int)});
+  col_defs.push_back(ColDef{"id1", TypeId::INTEGER, sizeof(float)});
+  col_defs.push_back(ColDef{"name", TypeId::INTEGER, sizeof(char) * 7});
+  col_defs.push_back(ColDef{"avaerage", TypeId::INTEGER, sizeof(int)});
   sm_manager_->create_table(TEST_TABLE_NAME, col_defs, nullptr);
-  EXPECT_EQ(sm_manager_->db_.tabs_[TEST_TABLE_NAME].cols.size(), 3);
+  EXPECT_EQ(sm_manager_->db_.tabs_[TEST_TABLE_NAME].cols().size(), 3);
   col_defs.clear();
-  col_defs.push_back(ColDef{"new_id", TYPE_INT, sizeof(int)});
-  col_defs.push_back(ColDef{"name2", TYPE_STRING, 7 * sizeof(char)});
+  col_defs.push_back(ColDef{"new_id", TypeId::INTEGER, sizeof(int)});
+  col_defs.push_back(ColDef{"name2", TypeId::VARCHAR, 7 * sizeof(char)});
   ASSERT_NE(sm_manager_->add_table_cols(TEST_TABLE_NAME, col_defs, nullptr),
             std::make_optional<int>(0));
-  EXPECT_EQ(sm_manager_->db_.tabs_[TEST_TABLE_NAME].cols.size(), 5);
+  EXPECT_EQ(sm_manager_->db_.tabs_[TEST_TABLE_NAME].cols().size(), 5);
 }

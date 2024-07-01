@@ -113,6 +113,7 @@ public:
   auto get_uninlined_column_size() const {
     return schema_uninlined_cols_.size();
   }
+  std::vector<ColMeta> &get_cols() { return schema_cols_; }
   inline auto getget_inlined_storaged_size() const { return schema_len_; }
   inline auto inlines() const { return tuple_is_inlined_; }
   auto to_string(bool simplified = true) const -> std::string;

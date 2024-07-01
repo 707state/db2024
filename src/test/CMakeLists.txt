@@ -1,6 +1,6 @@
 add_executable(create_table_test create_table_test.cpp)
 # add_library(test STATIC SOURCES)
-target_link_libraries(create_table_test system gtest_main record storage)
+target_link_libraries(create_table_test system gtest_main record storage fmt)
 
 add_executable(lru_replacer_test lru_replacer_test.cpp)
 target_link_libraries(lru_replacer_test system gtest_main record storage)
