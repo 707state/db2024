@@ -119,6 +119,7 @@ public:
   inline auto inlines() const { return tuple_is_inlined_; }
   auto to_string(bool simplified = true) const -> std::string;
   auto ToString() const -> std::string;
+  void push_back(ColMeta meta) { this->schema_cols_.emplace_back(meta); }
   std::optional<std::string> tab_name;
   size_t schema_len_;
   std::vector<ColMeta> schema_cols_;

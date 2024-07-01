@@ -1,16 +1,49 @@
-
-
 #include "binder/binder.h"
-#include "binder/statement/select_statement.h"
 #include "common/exception.h"
 #include "common/logger.h"
 #include "fmt/format.h"
 #include "postgres_parser.hpp"
-
+#include "sstream"
 Binder::Binder() {}
 
+static std::string pre_process(std::string str) {
+  std::stringstream ss(str);
+  std::string token1, token2;
+  std::vector<std::string> tokens;
+  while (ss >> token1) {
+    tokens.push_back(std::move(token1));
+  }
+  if (tokens.size() <= 2) {
+    return str;
+  }
+  if (tokens[0] != "create" || tokens[0] != "drop" || tokens[1] != "index") {
+    return str;
+  }
+  std::string tmp{};
+  for (int i = 2; i < tokens.size(); i++) {
+    tmp += tokens[i];
+  }
+  tmp.pop_back();
+  if (tokens[0] == "create") {
+    if (auto leftbracket = tmp.find('('); leftbracket != std::string::npos) {
+      std::string table = tmp.substr(0, leftbracket);
+      std::string column = tmp.substr(leftbracket + 1);
+      return fmt::format("create index {}_{} on {})", table, column, tmp);
+    }
+  }
+  if (tokens[1] == "drop") {
+    if (auto leftbracket = tmp.find('('); leftbracket != std::string::npos) {
+      std::string table = tmp.substr(0, leftbracket);
+      std::string column = tmp.substr(leftbracket + 1);
+      return fmt::format("drop index {}_{}", table, column);
+    }
+  }
+  return str;
+}
+
 void Binder::ParseAndSave(const std::string &query) {
-  parser_.Parse(query);
+  auto nQuery = pre_process(query);
+  parser_.Parse(nQuery);
   if (!parser_.success) {
     LOG_INFO("Query failed to parse!");
     throw Exception(

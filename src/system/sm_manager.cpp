@@ -12,25 +12,27 @@ See the Mulan PSL v2 for more details. */
 
 #include <algorithm>
 #include <exception>
+#include <experimental/filesystem>
 #include <iostream>
 #include <optional>
 #include <string>
 #include <sys/stat.h>
 #include <unistd.h>
 
-#include <fstream>
-
 #include "common/config.h"
 #include "common/context.h"
 #include "common/err_message.h"
 #include "common/exception.h"
 #include "errors.h"
+#include "experimental/filesystem"
 #include "format.h"
 #include "index/ix_index_handle.h"
 #include "record/rm_manager.h"
 #include "record_printer.h"
 #include "system/sm_meta.h"
 #include "type/type_id.h"
+#include <fstream>
+namespace fs = std::experimental::filesystem;
 /**
  * @description: 判断是否为一个文件夹
  * @return {bool} 返回是否为一个文件夹
@@ -60,18 +62,18 @@ RC_VALUES SmManager::is_dir_rc(const std::string &db_name) {
 void SmManager::create_db(const std::string &db_name) {
   if (is_dir(db_name)) {
     printf("Throw error at file: %s, line: %d\n", __FILE__, __LINE__);
-    throw DatabaseExistsError(db_name);
+    // throw DatabaseExistsError(db_name);
   }
   // 为数据库创建一个子目录
   if (mkdir(db_name.c_str(), S_IRWXU) < 0) { // 创建一个名为db_name的目录
     printf("Throw error at file: %s, line: %d\n", __FILE__, __LINE__);
 
-    throw UnixError();
+    // throw UnixError();
   }
   if (chdir(db_name.c_str()) < 0) { // 进入名为db_name的目录
     printf("Throw error at file: %s, line: %d\n", __FILE__, __LINE__);
 
-    throw UnixError();
+    // throw UnixError();
   }
   // 创建系统目录
   auto *new_db = new DbMeta();
@@ -136,18 +138,31 @@ RC_VALUES SmManager::create_db_rc(const std::string &db_name) {
  * @description: 删除数据库，同时需要清空相关文件以及数据库同名文件夹
  * @param {string&} db_name 数据库名称，与文件夹同名
  */
+static auto remove_dir(const fs::path &dir) {
+  if (fs::exists(dir) && fs::is_directory(dir)) {
+    try {
+      fs::remove_all(dir);
+      std::cout << "Directory and all its contents removed: " << dir << '\n';
+    } catch (const fs::filesystem_error &e) {
+      std::cerr << "Error: " << e.what() << '\n';
+    }
+  } else {
+    std::cout << "Directory does not exist or is not a directory: " << dir
+              << '\n';
+  }
+}
 void SmManager::drop_db(const std::string &db_name) {
   if (!is_dir(db_name)) {
     printf("Throw error at file: %s, line: %d\n", __FILE__, __LINE__);
 
     throw DatabaseNotFoundError(db_name);
   }
-  // std::string cmd = "rm -r " + db_name;
-  if (rmdir(db_name.c_str()) < 0) {
-    printf("Throw error at file: %s, line: %d\n", __FILE__, __LINE__);
-
-    throw UnixError();
-  }
+  remove_dir(db_name);
+  // if (rmdir(db_name.c_str()) < 0) {
+  //   printf("Throw error at file: %s, line: %d\n", __FILE__, __LINE__);
+  //
+  //   throw UnixError();
+  // }
 }
 /**
  * @description: 删除数据库，同时需要清空相关文件以及数据库同名文件夹
@@ -158,7 +173,14 @@ RC_VALUES SmManager::drop_db_rc(const std::string &db_name) {
     return RC_VALUES::RC_UNIX_ERROR;
   }
   // std::string cmd = "rm -r " + db_name;
-  if (rmdir(db_name.c_str()) < 0) {
+  // if (rmdir(db_name.c_str()) < 0) {
+  //   return RC_VALUES::RC_UNIX_ERROR;
+  // }
+  try {
+    remove_dir(db_name);
+    return RC_VALUES::RC_SUCCESS;
+  } catch (std::exception &e) {
+    std::cerr << e.what();
     return RC_VALUES::RC_UNIX_ERROR;
   }
   return RC_VALUES::RC_SUCCESS;
@@ -362,7 +384,7 @@ void SmManager::create_table(const std::string &tab_name,
     ColMeta col{tab_name,    col_def.name, col_def.type,
                 col_def.len, curr_offset,  false};
     curr_offset += col_def.len;
-    tab.key_schema.schema_cols_.push_back(col);
+    tab.key_schema.push_back(col);
   }
   // Create & open record file
   int record_size =
@@ -440,7 +462,7 @@ SmManager::add_table_cols(const std::string &tab_name,
   } catch (std::exception &e) {
     printf("Error in file: %s, line: %d\n", __FILE__, __LINE__);
     std::cout << e.what();
-    return std::make_optional(0);
+    return std::nullopt;
   }
 }
 /**
