@@ -58,7 +58,7 @@ Analyze::do_analyze(std::shared_ptr<ast::TreeNode> parse) {
   } else if (auto x = std::dynamic_pointer_cast<ast::InsertStmt>(parse)) {
     // 处理insert 的values值
     for (auto &sv_val : x->vals) {
-      query->values.push_back(convert_sv_value(sv_val));
+      query->values.push_back(*sv_val);
     }
   } else {
     // do nothing
@@ -94,7 +94,7 @@ void Analyze::get_all_cols(const std::vector<std::string> &tab_names,
                            std::vector<ColMeta> &all_cols) {
   for (auto &sel_tab_name : tab_names) {
     // 这里db_不能写成get_db(), 注意要传指针
-    const auto &sel_tab_cols = sm_manager_->db_.get_table(sel_tab_name).cols;
+    const auto &sel_tab_cols = sm_manager_->db_.get_table(sel_tab_name).cols();
     all_cols.insert(all_cols.end(), sel_tab_cols.begin(), sel_tab_cols.end());
   }
 }

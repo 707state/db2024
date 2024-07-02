@@ -10,11 +10,10 @@ See the Mulan PSL v2 for more details. */
 
 #pragma once
 
-#include "execution_defs.h"
-#include "execution_manager.h"
 #include "executor_abstract.h"
-#include "index/ix.h"
-#include "system/sm.h"
+#include "record/rm_file_handle.h"
+#include "system/sm_manager.h"
+#include "system/sm_meta.h"
 
 class IndexScanExecutor : public AbstractExecutor {
 private:

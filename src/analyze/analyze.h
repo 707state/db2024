@@ -16,6 +16,7 @@ See the Mulan PSL v2 for more details. */
 #include <string>
 #include <vector>
 
+#include "binder/bound_statement.h"
 #include "common/common.h"
 #include "parser/ast.h"
 #include "system/sm_manager.h"
@@ -37,7 +38,10 @@ public:
 
   Query() {}
 };
-
+class RMDBQuery {
+  std::shared_ptr<BoundStatement> parse;
+  // std::vector<>
+};
 class Analyze {
 private:
   SmManager *sm_manager_;

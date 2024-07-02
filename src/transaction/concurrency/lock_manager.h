@@ -10,11 +10,13 @@ See the Mulan PSL v2 for more details. */
 
 #pragma once
 
+#include "defs.h"
 #include "transaction/transaction.h"
 #include <condition_variable>
 #include <list>
 #include <mutex>
-
+#include <transaction/txn_defs.h>
+#include <unordered_map>
 static const std::string GroupLockModeStr[10] = {"NON_LOCK", "IS", "IX",
                                                  "S",        "X",  "SIX"};
 
@@ -36,6 +38,7 @@ class LockManager {
   /* 事务的加锁申请 */
   class LockRequest {
   public:
+    LockRequest() = default;
     LockRequest(txn_id_t txn_id, LockMode lock_mode)
         : txn_id_(txn_id), lock_mode_(lock_mode), granted_(false) {}
 
@@ -47,6 +50,7 @@ class LockManager {
   /* 数据项上的加锁队列 */
   class LockRequestQueue {
   public:
+    LockRequestQueue() = default;
     std::list<LockRequest> request_queue_; // 加锁队列
     std::condition_variable
         cv_; // 条件变量，用于唤醒正在等待加锁的申请，在no-wait策略下无需使用
@@ -55,8 +59,7 @@ class LockManager {
   };
 
 public:
-  LockManager() = default;
-
+  LockManager() {}
   ~LockManager() {}
 
   bool lock_shared_on_record(Transaction *txn, const Rid &rid, int tab_fd);
@@ -79,5 +82,5 @@ public:
 
 private:
   std::mutex latch_; // 用于锁表的并发
-  std::unordered_set<LockDataId, LockRequestQueue> lock_table_; // 全局锁表
+  std::unordered_map<LockDataId, LockRequestQueue> lock_table_; // 全局锁表
 };

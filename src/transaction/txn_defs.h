@@ -11,6 +11,9 @@ See the Mulan PSL v2 for more details. */
 #pragma once
 
 #include <atomic>
+#include <cassert>
+#include <cstddef>
+#include <cstdint>
 
 #include "common/config.h"
 #include "defs.h"
@@ -121,13 +124,14 @@ public:
   Rid rid_;
   LockDataType type_;
 };
-
-template <> struct std::hash<LockDataId> {
+namespace std {
+template <> struct hash<LockDataId> {
   size_t operator()(const LockDataId &obj) const {
     return std::hash<int64_t>()(obj.Get());
   }
 };
 
+} // namespace std
 /* 事务回滚原因 */
 enum class AbortReason {
   LOCK_ON_SHIRINKING = 0,
