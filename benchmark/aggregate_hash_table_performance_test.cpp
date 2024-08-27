@@ -13,6 +13,7 @@ See the Mulan PSL v2 for more details. */
 #include "common/lang/memory.h"
 #include "common/lang/vector.h"
 #include "sql/expr/aggregate_hash_table.h"
+#include "src/observer/storage/common/chunk.h"
 
 class AggregateHashTableBenchmark : public benchmark::Fixture
 {

@@ -1,13 +1,11 @@
 # 可以获取父cmake的变量
-MESSAGE("${CMAKE_COMMON_FLAGS}")
+message("${CMAKE_COMMON_FLAGS}")
 
-find_package(GTest CONFIG REQUIRED)
+find_package(GTest CONFIG REQUIRED HINTS /home/jask/install/ NO_DEFAULT_PATH)
 
-include(GoogleTest)
+add_subdirectory(common)
+if(WITH_MEMTRACER)
+  add_subdirectory(memtracer)
+endif(WITH_MEMTRACER)
 
-ADD_SUBDIRECTORY(common)
-IF (WITH_MEMTRACER)
-    ADD_SUBDIRECTORY(memtracer)
-ENDIF (WITH_MEMTRACER)
-
-ADD_SUBDIRECTORY(observer)
+add_subdirectory(observer)

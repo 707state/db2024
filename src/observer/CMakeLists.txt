@@ -1,53 +1,62 @@
-MESSAGE(STATUS "This is CMAKE_CURRENT_SOURCE_DIR dir " ${CMAKE_CURRENT_SOURCE_DIR})
+message(STATUS "This is CMAKE_CURRENT_SOURCE_DIR dir "
+               ${CMAKE_CURRENT_SOURCE_DIR})
 
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+set(CMAKE_PREFIX_PATH /home/jask/install/)
+file(GLOB_RECURSE ALL_SRC *.cpp *.c)
+set(MAIN_SRC ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
+message("MAIN SRC: " ${MAIN_SRC})
+foreach(F ${ALL_SRC})
 
-FILE(GLOB_RECURSE ALL_SRC *.cpp *.c)
-SET(MAIN_SRC ${CMAKE_CURRENT_SOURCE_DIR}/main.cpp)
-MESSAGE("MAIN SRC: " ${MAIN_SRC})
-FOREACH (F ${ALL_SRC})
+  if(NOT ${F} STREQUAL ${MAIN_SRC})
+    set(LIB_SRC ${LIB_SRC} ${F})
+    message("Use " ${F})
+  endif()
 
-    IF (NOT ${F} STREQUAL ${MAIN_SRC})
-        SET(LIB_SRC ${LIB_SRC} ${F})
-        MESSAGE("Use " ${F})
-    ENDIF()
+endforeach(F)
 
-ENDFOREACH (F)
-
-SET(LIBEVENT_STATIC_LINK TRUE)
-FIND_PACKAGE(Libevent CONFIG REQUIRED)
+set(LIBEVENT_STATIC_LINK TRUE)
+find_package(
+  Libevent
+  2.1
+  CONFIG
+  REQUIRED
+  PATHS
+  /home/jask/install/
+  NO_DEFAULT_PATH)
 
 # JsonCpp cannot work correctly with FIND_PACKAGE
 
-SET(LIBRARIES common pthread dl libevent::core libevent::pthreads libjsoncpp.a)
+set(LIBRARIES common pthread dl libevent::core libevent::pthreads libjsoncpp.a)
 
 # 指定目标文件位置
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
-MESSAGE("Binary directory:" ${EXECUTABLE_OUTPUT_PATH})
-SET(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
-MESSAGE("Archive directory:" ${LIBRARY_OUTPUT_PATH})
+set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+message("Binary directory:" ${EXECUTABLE_OUTPUT_PATH})
+set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
+message("Archive directory:" ${LIBRARY_OUTPUT_PATH})
 
-ADD_EXECUTABLE(observer ${MAIN_SRC})
-TARGET_LINK_LIBRARIES(observer observer_static)
+add_executable(observer ${MAIN_SRC})
+target_link_libraries(observer observer_static)
 
-ADD_LIBRARY(observer_static STATIC ${LIB_SRC})
-INCLUDE (readline)
-MINIOB_FIND_READLINE()
-IF (HAVE_READLINE)
-    TARGET_LINK_LIBRARIES(observer_static ${READLINE_LIBRARY})
-    TARGET_INCLUDE_DIRECTORIES(observer_static PRIVATE ${READLINE_INCLUDE_DIR})
-    ADD_DEFINITIONS(-DUSE_READLINE)
-    MESSAGE ("observer_static use readline")
-ELSE ()
-    MESSAGE ("readline is not found")
-ENDIF()
+add_library(observer_static STATIC ${LIB_SRC})
+include(readline)
+miniob_find_readline()
+if(HAVE_READLINE)
+  target_link_libraries(observer_static ${READLINE_LIBRARY})
+  target_include_directories(observer_static PRIVATE ${READLINE_INCLUDE_DIR})
+  add_definitions(-DUSE_READLINE)
+  message("observer_static use readline")
+else()
+  message("readline is not found")
+endif()
 
-SET_TARGET_PROPERTIES(observer_static PROPERTIES OUTPUT_NAME observer)
-TARGET_LINK_LIBRARIES(observer_static ${LIBRARIES})
+set_target_properties(observer_static PROPERTIES OUTPUT_NAME observer)
+target_link_libraries(observer_static ${LIBRARIES})
 
-# Target 必须在定义 ADD_EXECUTABLE 之后， programs 不受这个限制
-# TARGETS和PROGRAMS 的默认权限是OWNER_EXECUTE, GROUP_EXECUTE, 和WORLD_EXECUTE，即755权限， programs 都是处理脚本类
+# Target 必须在定义 ADD_EXECUTABLE 之后， programs 不受这个限制 TARGETS和PROGRAMS
+# 的默认权限是OWNER_EXECUTE, GROUP_EXECUTE, 和WORLD_EXECUTE，即755权限， programs 都是处理脚本类
 # 类型分为RUNTIME／LIBRARY／ARCHIVE, prog
-INSTALL(TARGETS observer observer_static 
-    RUNTIME DESTINATION bin
-    ARCHIVE DESTINATION lib)
+install(
+  TARGETS observer observer_static
+  RUNTIME DESTINATION bin
+  ARCHIVE DESTINATION lib)
